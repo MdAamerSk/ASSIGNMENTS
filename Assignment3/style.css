@@ -1,0 +1,155 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color:white
+}
+body {
+    height: 100%;
+    width: 100%;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+}
+.top {
+    position: relative;
+    min-height: 100vh;
+    background-image: url(https://shinsei-village.vercel.app/assets/bg.png);
+    background-size: cover;
+    background-color: #000;
+    background-position: center top;
+    background-repeat: no-repeat;
+    clip-path: ellipse(90% 100% at 50% 0%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    z-index: 2;
+}
+nav{
+    display:flex;
+    align-items:center;
+    position:absolute;
+    top:0;
+    gap:80px;
+   
+}
+nav .logo  {
+   height: 200px;
+   width:127px
+}
+ul{
+    display:flex;
+    gap:30px;
+}
+li {
+    list-style: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+ul i {
+    color: #d8b26e;
+}
+nav .icon{
+    font-size: 25px;
+    color: #000;
+}
+.join {
+    position: absolute;
+    left: 19.5%;
+    top: 33%;
+    font-size: 25px;
+    font-family: Poppins;
+}
+
+h1 {
+    display: block;
+    font-size: 32px;
+    margin-block-start: 73.7px;
+    margin-block-end: 73.7px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+.btn {
+    position: relative;
+    padding: 18px 70px;
+    background-image: url(assets/btn-img.png);
+    background-size: cover;
+    color: #1d1d1d;
+    border-radius: 10px;
+    box-shadow: 0 30px 30px rgba(0, 0, 0, 0.35);
+    border-color: transparent;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-bottom-style: solid;
+}
+.monkey {
+    position: absolute;
+    bottom: 0%;
+    width: 45%;
+    height: 70%;
+}
+.title {
+    font-family: 'Electroharmonix', sans-serif;
+    font-size: 110px;
+}
+.genuine {
+    position: absolute;
+    right: 19%;
+    bottom: 40%;
+    font-size: 25px;
+    font-family: Poppins;
+}
+
+.bottom {
+    background: #241d2d;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    margin-top: -150px;
+    padding-top: 160px;
+    min-height: 600px;
+}
+.bottom h1 {
+    display: block;
+    font-size: 32px;
+    margin-left:45%;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+.paras {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    gap: 20px;
+    padding: 65px;
+}
+p {
+    max-width: 80vh;
+    font-size: 20px;
+}
+p {
+    display: block;
+    margin-block-start: 20px;
+    margin-block-end: 20px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
