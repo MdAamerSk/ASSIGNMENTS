@@ -1,0 +1,279 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+h1 {
+    font-size: 39px;
+    text-align: center;
+    padding: 6px;
+}
+
+main {
+    position: absolute;
+    height: 70%;
+    width: 100%;
+}
+
+.card {
+    position: relative;
+    height: 90%;
+    width: 23%;
+    margin: 24px 10px 9px 19px;
+    float: left;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    
+}
+
+.card:hover {
+    border: 2px solid #E98017;
+    transform: translateY(-5px);
+}
+
+.card .drinks-img {
+    height: 70%;
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-image: cover;
+}
+
+.name {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+}
+
+.description {
+    color: rgb(174, 161, 161);
+    text-align: center;
+    padding: 10px;
+}
+
+.price {
+    color: #E98017;
+    font-size: 24px;
+    text-align: center;
+    padding: 10px;
+}
+
+section {
+    position: absolute;
+    display: flex;
+    align-items: center;
+
+    top: 77%;
+    height: 60%;
+
+    border-radius: 20px;
+    margin: 10px;
+    border: 2px solid #E98017;
+}
+
+section .leaf {
+    height: 90%;
+    width: 18%;
+    margin-right: 10px;
+    background-color: transparent;
+}
+
+section .steak {
+    height: 90%;
+    width: 28%;
+    margin-left: 10px;
+    background-color: transparent;
+}
+
+section .content {
+    height: 90%;
+    width: 50%;
+    background-color: transparent;
+}
+
+section h5 {
+    margin: 5% 10% 0;
+    color: #E98017;
+    background-color: transparent;
+}
+
+section h1 {
+    margin: 0 5% 0 10%;
+    text-align: start;
+    background-color: transparent;
+}
+
+section p {
+    font-size: 20px;
+    line-height: 30px;
+    text-align: start;
+    padding: 10px;
+    color: rgb(174, 161, 161);
+    margin: 0 10% 5% 10%;
+    background-color: transparent;
+}
+
+section button {
+    border-radius: 20px;
+    color: white;
+    border: 2px solid #E98017;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10% 0 10%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+section button:hover {
+    background: #E98017;
+    color: black;
+}
+
+.site-footer {
+    position: absolute;
+    top: 140%;
+    width: 100%;
+    padding: 30px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #E98017;
+    background-color: black;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.footer-left {
+    background-color: transparent;
+}
+
+.footer-left span {
+
+    font-size: 14px;
+    color: #999;
+    letter-spacing: 1px;
+
+}
+
+.footer-center .footer-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+}
+
+.footer-links li {
+    background-color: transparent;
+}
+
+.footer-links li a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    transition: color 0.3s ease;
+    background-color: transparent;
+}
+
+.footer-links li a:hover {
+    color: #E98017;
+}
+
+.footer-links .dot {
+    width: 6px;
+    height: 6px;
+    background-color: #E98017;
+    border-radius: 50%;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.follow-text {
+
+    font-size: 14px;
+    color: #999;
+
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+
+}
+
+.social-icons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(233, 128, 23, 0.5);
+    border-radius: 50%;
+    color: #E98017;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: transparent !important;
+}
+
+.social-icons a i {
+    background-color: transparent;
+}
+
+.social-icons a:hover {
+    border-color: #E98017;
+    background-color: #E98017 !important;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+/* Badge Styles */
+.badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 12px;
+    border: 1px solid #E98017;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(5px);
+    z-index: 10;
+}
+
+.badge i,
+.badge span {
+    background-color: transparent !important;
+    color: #E98017 !important;
+
+}
+
+.badge i {
+    font-size: 12px;
+}
+
+.badge span {
+    font-size: 11px;
+    font-weight: 500;
+}
