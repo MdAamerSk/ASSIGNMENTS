@@ -1,4 +1,4 @@
-# SHERIYANS ASSIGNMENT 
+# SHERYIANS ASSIGNMENT 
 
 ## Technologies Used
 - HTML
