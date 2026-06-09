@@ -1,56 +1,43 @@
-# Assignment 2
+# UI Layout Brush-Up: HTML & CSS (Assignment 2)
 
-A responsive web project built with **HTML** and **CSS** to practice modern web development techniques and UI/UX principles.
+This project is a collection of three web page layouts built entirely with pure HTML and CSS. It was developed as a hands-on exercise  to brush up on fundamental web structural concepts and layout techniques. Specifically, it focuses on using traditional Absolute and Relative positioning, deliberately solving layout challenges without relying on modern frameworks like Flexbox or CSS Grid.
 
-## 📋 Overview
+## 🛠️ Built With
 
-This assignment demonstrates proficiency in semantic HTML markup and advanced CSS styling, including layout techniques, responsive design, and visual enhancements.
+*   **HTML5:** For structuring the semantics of the pages.
+*   **CSS3:** For styling, colors, typography, and precise element positioning.
 
-## 🛠️ Tech Stack
+## 📂 Project Files
 
-- **HTML5** – Semantic markup and structure
-- **CSS3** – Styling, animations, and responsive layouts
+*   `index.html` & `style.css`: Challenge 1 
+*   `index2.html` & `style2.css`: Challenge 2 
+*   `index3.html` & `style3.css`: Challenge 3 
 
-## 📊 Composition
+## 👁️ Outputs / Previews
 
-- HTML: 48.9%
-- CSS: 51.1%
+Below are the visual outputs for the three different layouts.
 
-## ✨ Features
+### Layout 1 (`index.html`)
 
-- Clean, semantic HTML structure
-- Responsive design principles
-- Modern CSS styling and effects
-- Cross-browser compatible
+<!-- TODO: Upload your output image for index.html here -->
+<img width="1763" height="1308" alt="image" src="https://github.com/user-attachments/assets/1c10b4ab-50fd-4477-844a-4b39eb3b3875" />
 
-## 🎯 Learning Objectives
 
-- Master HTML5 semantic elements
-- Implement advanced CSS techniques
-- Build responsive layouts
-- Enhance UI/UX design skills
+### Layout 2 (`index2.html`)
 
-## 📂 Project Structure
+<!-- TODO: Upload your output image for index2.html here -->
+<img width="1763" height="1016" alt="image" src="https://github.com/user-attachments/assets/ba750a40-8265-42fd-b56b-3748ce59b8ca" />
 
-```
-assignment2/
-├── index.html
-├── css/
-│   └── style.css
-└── README.md
-```
 
-## 🚀 Getting Started
+### Layout 3 (`index3.html`)
 
-1. Clone or download the repository
-2. Open `index.html` in your web browser
-3. No additional dependencies required
+<!-- TODO: Upload your output image for index3.html here -->
+<img width="1763" height="844" alt="image" src="https://github.com/user-attachments/assets/75128b84-217e-457e-abf8-e1bafcf15bf3" />
 
-## 📝 Notes
 
-This project was created as a learning exercise to strengthen front-end development fundamentals and best practices in HTML and CSS.
+## 💡 Key Learnings & Brush-Up Topics
 
----
-
-**Author:** MdAamerSk  
-**Status:** Complete
+*   Mastering the relationship between `position: relative` on parent containers and `position: absolute` on nested children.
+*   Handling layering, transparencies, and overlapping graphic elements correctly using `z-index`.
+*   Structuring HTML code for targeted styling.
+*   Implementing design mockups accurately using fundamental CSS properties.
