@@ -7,8 +7,10 @@
 ## 📸 Project Preview
 
 <!-- Add your preview image here -->
-![Project Preview](./preview.png)
+<img width="1763" height="9882" alt="image" src="https://github.com/user-attachments/assets/a8551c7d-6865-4514-b657-5becdcfbb7cc" />
 
+## Live 
+https://mdaamersk.github.io/ASSIGNMENTS/Assignment6/
 ---
 
 ## 🎯 Project Overview
