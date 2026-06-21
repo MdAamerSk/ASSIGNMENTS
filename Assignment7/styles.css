@@ -1,0 +1,704 @@
+/* --- Light Theme Colors (Default) --- */
+:root, :root[data-theme="light"] {
+  --bg-primary: #f8fafc;         /* Page background */
+  --bg-secondary: #ffffff;       /* Card/Container background */
+  --bg-tertiary: #f1f5f9;        /* Input/Nested box background */
+  
+  --text-primary: #0f172a;       /* Dark text for headings */
+  --text-secondary: #475569;     /* Slate text for descriptions */
+  --text-muted: #94a3b8;         /* Light gray text for badges */
+  
+  --border-color: #e2e8f0;       /* Border line color */
+  --border-focus: var(--accent-color); /* Highlight color when input is active */
+  
+  /* Purple Color Palette (Light Mode) */
+  --purple-base: #8f84ff;
+  --purple-d20: #726acc; 
+  --purple-d40: #564f99; 
+  --purple-d60: #393566; 
+  --purple-l20: #a59dff;
+  --purple-l40: #bcb5ff; 
+  --purple-l60: #d2ceff; 
+
+  --accent-color: var(--purple-base);
+  --accent-hover: var(--purple-d20);
+  --accent-light: var(--purple-l60);
+  
+  /* Box Shadows (gives elements a 3D elevated look) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  /* Sandbox Colors (Light Mode) */
+  --sandbox-grandparent: #fee2e2; 
+  --sandbox-parent: #ffedd5;      
+  --sandbox-child: #fef9c3;    
+  --sandbox-button: var(--accent-color);
+}
+
+/* --- Dark Theme Colors --- */
+:root[data-theme="dark"] {
+  --bg-primary: #0b0f19;         /* Midnight background */
+  --bg-secondary: #161e2e;       /* Card background */
+  --bg-tertiary: #1f2937;        /* Input/Nested box background */
+  
+  --text-primary: #f9fafb;       /* White text for headings */
+  --text-secondary: #9ca3af;     /* Light gray text for descriptions */
+  --text-muted: #6b7280;         /* Slate gray text for captions */
+  
+  --border-color: #2d3748;       /* Charcoal borders */
+  --border-focus: var(--accent-color); /* Neon purple border when active */
+  
+  /* Purple Color Palette (Dark Mode Inverted) */
+  --purple-base: #8f84ff;
+  --purple-d20: #a59dff; 
+  --purple-d40: #bcb5ff; 
+  --purple-d60: #d2ceff; 
+  --purple-l20: #726acc; 
+  --purple-l40: #564f99; 
+  --purple-l60: #393566; 
+
+  --accent-color: var(--purple-base);
+  --accent-hover: var(--purple-d20);
+  --accent-light: var(--purple-l60);
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  /* Sandbox Colors (Dark Mode) */
+  --sandbox-grandparent: #7f1d1d; 
+  --sandbox-parent: #7c2d12;      
+  --sandbox-child: #713f12;       
+  --sandbox-button: var(--accent-color);
+}
+
+/* ==========================================================================
+   RESET & GLOBAL BASE STYLES
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column; 
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme toggle */
+}
+
+/* ==========================================================================
+   LAYOUT CONTAINERS & TYPOGRAPHY
+ */
+.app-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;            
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+}
+
+.logo-area h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 99px;
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+}
+
+.app-main {
+  flex: 1; /* Causes main area to grow and push footer to bottom */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; 
+}
+
+.section-container {
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.section-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   THEME TOGGLE BUTTON
+*/
+.btn-theme-toggle {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.6rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Toggle visibility of icons using CSS variables state */
+:root[data-theme="light"] .mode-icon-light { display: block; }
+:root[data-theme="dark"] .mode-icon-light { display: none; }
+:root[data-theme="dark"] .mode-icon-dark { display: block; }
+:root[data-theme="light"] .mode-icon-dark { display: none; }
+
+/* ==========================================================================
+   SECTION A: BROWSER RENDERING PIPELINE (CAROUSEL)
+ */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; 
+  position: relative;
+  width: 100%;
+}
+
+.carousel-wrapper {
+  overflow: hidden; 
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-tertiary);
+}
+
+.pipeline-flow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  transition: transform 0.4s ease-in-out; /* Animates slide transitions smoothly */
+}
+
+.pipeline-card {
+  min-width: 100%; /* Each card takes up exactly 100% of the wrapper viewport */
+  flex-shrink: 0;  /* Stops flexbox from shrinking the cards */
+  flex-grow: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.step-badge {
+  font-size: 0.7rem;
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.pipeline-card h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.card-figure {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.card-figure code {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  display: block;
+}
+
+.card-figure figcaption {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+  border-top: 1px dashed var(--border-color);
+  padding-top: 0.25rem;
+  text-align: center;
+}
+
+/* Navigation Round Buttons */
+.carousel-btn {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  transition: background-color 0.2s, color 0.2s, transform 0.1s;
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border-color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   SECTION B: EVENT PROPAGATION SANDBOX
+*/
+.sandbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+
+.propagation-box {
+  width: 100%;
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.box-label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.grandparent-box {
+  background-color: var(--sandbox-grandparent);
+  border: 2px dashed rgba(239, 68, 68, 0.4);
+  color: #7f1d1d;
+  max-width: 700px;
+}
+
+:root[data-theme="dark"] .grandparent-box {
+  color: #fee2e2;
+}
+
+.parent-box {
+  background-color: var(--sandbox-parent);
+  border: 2px dashed rgba(249, 115, 22, 0.4);
+  color: #7c2d12;
+  margin-top: 1rem;
+}
+
+:root[data-theme="dark"] .parent-box {
+  color: #ffedd5;
+}
+
+.child-box {
+  background-color: var(--sandbox-child);
+  border: 2px dashed rgba(234, 179, 8, 0.4);
+  color: #713f12;
+  margin-top: 1rem;
+}
+
+:root[data-theme="dark"] .child-box {
+  color: #fef9c3;
+}
+
+.propagation-button {
+  background-color: var(--sandbox-button);
+  color: #ffffff;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+  transition: transform 0.1s;
+}
+
+.propagation-button:hover {
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   SECTION C: TASK MANAGER APP WORKSPACE
+*/
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 1.5rem;
+}
+
+/* Switches to 2 columns on larger screens */
+@media (min-width: 768px) {
+  .workspace-grid {
+    grid-template-columns: 320px 1fr; /* Sidebar is 320px, task list fills remaining space */
+  }
+}
+
+.workspace-sidebar {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.25rem;
+  height: fit-content;
+}
+
+.task-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  outline: none;
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--border-focus);
+}
+
+.form-group.invalid input,
+.form-group.invalid select {
+  border-color: #ef4444;
+}
+
+.error-msg {
+  display: none; 
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+.form-group.invalid .error-msg {
+  display: block; 
+}
+
+/* Primary Button Style */
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Stats Header block */
+.workspace-header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+@media (min-width: 992px) {
+  .workspace-header-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.workspace-header-actions h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.task-stats {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stat-item {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  gap: 0.25rem;
+}
+
+.stat-num {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Bulky Clear All Button */
+.btn-secondary-danger {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+
+.btn-secondary-danger:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+/* Dynamic Task Cards styling */
+.task-list-empty {
+  min-height: 200px;
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  padding: 1.5rem;
+}
+
+.task-list-active {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.empty-state {
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Programmatic cards injection styling */
+.task-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s;
+}
+
+@media (min-width: 576px) {
+  .task-card {
+    flex-direction: row; /* Horizontal cards layout on desktop */
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-grow: 1;
+}
+
+.task-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.category-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* Individual badge coloring styles */
+.category-ui { background-color: #dbeafe; color: #1e40af; }
+.category-logic { background-color: #f3e8ff; color: #6b21a8; }
+.category-debugging { background-color: #fee2e2; color: #991b1b; }
+.category-docs { background-color: #f1f5f9; color: #475569; }
+
+/* Completed styling states */
+.task-card[data-status="completed"] {
+  background-color: var(--bg-tertiary);
+}
+
+.task-card[data-status="completed"] .task-card-title {
+  opacity: 0.65;
+  text-decoration: line-through; 
+  color: var(--text-muted);
+}
+
+/* Card control buttons */
+.task-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.btn-card {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.1s;
+}
+
+.btn-card-complete { color: #16a34a; border-color: rgba(22, 163, 74, 0.3); }
+.btn-card-complete:hover { background-color: #16a34a; color: #ffffff; }
+
+.btn-card-edit { color: var(--accent-color); border-color: rgba(143, 180, 255, 0.3); }
+.btn-card-edit:hover { background-color: var(--accent-color); color: #ffffff; }
+
+.btn-card-delete { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+.btn-card-delete:hover { background-color: #ef4444; color: #ffffff; }
+
+.edit-input-field {
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.25rem;
+  border: 1px solid var(--border-focus);
+  border-radius: 4px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+}
+
+/* ==========================================================================
+   FOOTER
+*/
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

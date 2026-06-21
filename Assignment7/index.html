@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phase 1 of the Task Manager App: HTML structure, browser rendering pipeline explainer, and event propagation sandbox.">
+  <title>Task Flow - Developer Dashboard</title>
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Fonts for modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header containing Application Title and Theme Toggle -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="logo-icon">⚡</span>
+        <h1>TaskFlow</h1>
+      </div>
+      <button id="theme-toggle" class="btn-theme-toggle" aria-label="Toggle dark/light theme">
+        <span class="mode-icon-light">☀️</span>
+        <span class="mode-icon-dark">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- Section A: The Pipeline Explainer UI -->
+    <section class="section-container" id="pipeline-explainer" aria-labelledby="pipeline-heading">
+      <div class="section-header">
+        <h2 id="pipeline-heading">Browser Rendering Pipeline</h2>
+        <p class="section-description">How a browser transforms raw HTML code into pixels on the screen.</p>
+      </div>
+
+      <div class="carousel-container">
+        <!-- Previous Slide Button -->
+        <button type="button" id="prev-btn" class="carousel-btn prev-btn" aria-label="Previous Step" disabled>◀</button>
+        
+        <!-- Viewport wrapper that hides overflow -->
+        <div class="carousel-wrapper">
+          <!-- The moving track -->
+          <div class="pipeline-flow" id="carousel-track">
+            <!-- Step 1: HTML Parsing -->
+            <article class="pipeline-card" data-step="1">
+              <header class="card-header">
+                <span class="step-badge">Step 1</span>
+                <h3>HTML Parsing</h3>
+              </header>
+              <p class="card-text">The browser processes raw bytes of HTML from the network and decodes them based on the specified character encoding.</p>
+              <figure class="card-figure">
+                <code>&lt;!DOCTYPE html&gt;...</code>
+                <figcaption>Raw Byte Stream to Characters</figcaption>
+              </figure>
+            </article>
+
+            <!-- Step 2: Tokenization -->
+            <article class="pipeline-card" data-step="2">
+              <header class="card-header">
+                <span class="step-badge">Step 2</span>
+                <h3>Tokenization</h3>
+              </header>
+              <p class="card-text">The parsed characters are converted into distinct tokens (StartTag, EndTag, Attribute, Character) based on HTML5 standard rules.</p>
+              <figure class="card-figure">
+                <code>[StartTag: body]</code>
+                <figcaption>Lexical Analysis & Tokens</figcaption>
+              </figure>
+            </article>
+
+            <!-- Step 3: DOM Tree -->
+            <article class="pipeline-card" data-step="3">
+              <header class="card-header">
+                <span class="step-badge">Step 3</span>
+                <h3>DOM Tree</h3>
+              </header>
+              <p class="card-text">Tokens are linked into a tree structure of nested nodes, representing the document's logical object structure.</p>
+              <figure class="card-figure">
+                <code>document → html → body</code>
+                <figcaption>Document Object Model</figcaption>
+              </figure>
+            </article>
+
+            <!-- Step 4: CSSOM Tree -->
+            <article class="pipeline-card" data-step="4">
+              <header class="card-header">
+                <span class="step-badge">Step 4</span>
+                <h3>CSSOM Tree</h3>
+              </header>
+              <p class="card-text">The browser parses external and embedded stylesheets to build a tree of cascading style rules for elements.</p>
+              <figure class="card-figure">
+                <code>body { display: flex; }</code>
+                <figcaption>CSS Object Model</figcaption>
+              </figure>
+            </article>
+
+            <!-- Step 5: Render Tree -->
+            <article class="pipeline-card" data-step="5">
+              <header class="card-header">
+                <span class="step-badge">Step 5</span>
+                <h3>Render Tree</h3>
+              </header>
+              <p class="card-text">The DOM and CSSOM are combined. Nodes that are styled to be visible are matched and structured into a rendering tree.</p>
+              <figure class="card-figure">
+                <code>DOM + CSSOM (Visible Only)</code>
+                <figcaption>Style Calculation Tree</figcaption>
+              </figure>
+            </article>
+
+            <!-- Step 6: Layout & Paint -->
+            <article class="pipeline-card" data-step="6">
+              <header class="card-header">
+                <span class="step-badge">Step 6</span>
+                <h3>Layout & Paint</h3>
+              </header>
+              <p class="card-text">The layout step computes geometric positions of nodes. The paint step translates nodes into actual pixels on the screen.</p>
+              <figure class="card-figure">
+                <code>Vector to Rasterization</code>
+                <figcaption>Geometric Layout & Paint</figcaption>
+              </figure>
+            </article>
+          </div>
+        </div>
+        
+        <!-- Next Slide Button -->
+        <button type="button" id="next-btn" class="carousel-btn next-btn" aria-label="Next Step">▶</button>
+      </div>
+    </section>
+
+    <!-- Section B: Event Propagation Sandbox -->
+    <section class="section-container" id="event-sandbox" aria-labelledby="sandbox-heading">
+      <div class="section-header">
+        <h2 id="sandbox-heading">Event Propagation Sandbox</h2>
+        <p class="section-description">Visualize Capturing, Target, and Bubbling phases in real-time nested containers.</p>
+      </div>
+
+      <div class="sandbox-container">
+        <!-- Nested Div Structure: Grandparent -> Parent -> Child -> Button -->
+        <div id="grandparent" class="propagation-box grandparent-box">
+          <div class="box-label">Grandparent (#grandparent)</div>
+          
+          <div id="parent" class="propagation-box parent-box">
+            <div class="box-label">Parent (#parent)</div>
+            
+            <div id="child" class="propagation-box child-box">
+              <div class="box-label">Child (#child)</div>
+              
+              <button id="trigger-btn" class="propagation-button">
+                Click to Trigger Event (#trigger-btn)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section C: Task Manager App Workspace -->
+    <section class="section-container" id="task-workspace" aria-labelledby="workspace-heading">
+      <div class="section-header">
+        <h2 id="workspace-heading">Task Manager Workspace</h2>
+        <p class="section-description">Add and organize your tasks using the semantic interactive form below.</p>
+      </div>
+
+      <div class="workspace-grid">
+        <!-- Task Creator Form -->
+        <aside class="workspace-sidebar">
+          <form id="task-form" class="task-form-container" novalidate>
+            
+            <div class="form-group">
+              <label for="task-title">Task Title</label>
+              <input 
+                type="text" 
+                id="task-title" 
+                name="title" 
+                placeholder="e.g., Implement dark mode toggle" 
+                required
+                autocomplete="off"
+              >
+              <span class="error-msg" id="title-error">Please enter a task title</span>
+            </div>
+
+            <div class="form-group">
+              <label for="task-category">Category</label>
+              <select id="task-category" name="category" required>
+                <option value="" disabled selected>Select a category...</option>
+                <option value="ui">UI Design</option>
+                <option value="logic">Core Logic</option>
+                <option value="debugging">Debugging</option>
+                <option value="docs">Documentation</option>
+              </select>
+              <span class="error-msg" id="category-error">Please select a category</span>
+            </div>
+
+            <button type="submit" id="submit-task-btn" class="btn-primary">
+              Add Task
+            </button>
+          </form>
+        </aside>
+
+        <!-- Dynamic Task Container -->
+        <div class="workspace-content">
+          <div class="workspace-header-actions">
+            <h3>Task List</h3>
+            <div class="task-stats">
+              <span class="stat-item">Total: <span id="stat-total" class="stat-num">0</span></span>
+              <span class="stat-item text-warning">Pending: <span id="stat-pending" class="stat-num">0</span></span>
+              <span class="stat-item text-success">Completed: <span id="stat-completed" class="stat-num">0</span></span>
+            </div>
+            <button type="button" id="clear-all-btn" class="btn-secondary-danger">Clear All</button>
+          </div>
+          
+          <div id="task-container" class="task-list-empty">
+            <!-- Dynamic task cards will be injected here by Javascript in Phase 2 -->
+            <div class="empty-state">
+              <span class="empty-icon">📂</span>
+              <p>No tasks added yet. Fill out the form to populate your list.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 TaskFlow Practice Assignment.</p>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js" defer></script>
+</body>
+</html>
