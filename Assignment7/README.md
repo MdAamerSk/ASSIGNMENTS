@@ -38,6 +38,10 @@ A comprehensive educational project demonstrating **HTML structure**, **browser 
 
 ---
 
+## Live Deployment Link
+
+https://mdaamersk.github.io/ASSIGNMENTS/Assignment6/
+
 ## 🔄 Browser Rendering Pipeline
 
 When you type a URL and press Enter, your browser undergoes a complex 6-step process to transform HTML/CSS code into pixels on your screen. Understanding this pipeline is crucial for web performance optimization.
