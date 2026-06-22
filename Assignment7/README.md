@@ -40,7 +40,7 @@ A comprehensive educational project demonstrating **HTML structure**, **browser 
 
 ## Live Deployment Link
 
-https://mdaamersk.github.io/ASSIGNMENTS/Assignment6/
+https://mdaamersk.github.io/ASSIGNMENTS/Assignment7/
 
 ## 🔄 Browser Rendering Pipeline
 
