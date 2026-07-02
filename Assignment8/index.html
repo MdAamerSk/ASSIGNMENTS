@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LedgerLite: Personal Finance Tracker with Expense Analytics</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* --- Design Tokens & Theme Colors --- */
+    :root {
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-xxl: 3rem;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      --glass-blur: 16px;
+    }
+
+    /* Dark Mode Defaults */
+    html[data-theme="dark"] {
+      --bg-app: hsl(224, 25%, 8%);
+      --bg-surface: hsla(224, 25%, 12%, 0.65);
+      --bg-surface-solid: hsl(224, 25%, 12%);
+      --border-color: hsla(224, 25%, 22%, 0.4);
+      --border-color-hover: hsla(224, 25%, 35%, 0.6);
+      --text-main: hsl(210, 40%, 98%);
+      --text-muted: hsl(215, 20%, 65%);
+      --text-inverse: hsl(224, 25%, 12%);
+
+      --color-primary: hsl(258, 85%, 66%);
+      --color-primary-hover: hsl(258, 85%, 72%);
+      --color-primary-glow: hsla(258, 85%, 66%, 0.15);
+
+      --color-success: hsl(142, 72%, 40%);
+      --color-success-hover: hsl(142, 72%, 46%);
+      --color-success-glow: hsla(142, 72%, 40%, 0.12);
+
+      --color-danger: hsl(350, 89%, 60%);
+      --color-danger-hover: hsl(350, 89%, 66%);
+      --color-danger-glow: hsla(350, 89%, 60%, 0.12);
+
+      --color-info: hsl(199, 89%, 48%);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 16px -6px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Light Mode Overrides */
+    html[data-theme="light"] {
+      --bg-app: hsl(210, 40%, 96%);
+      --bg-surface: rgba(255, 255, 255, 0.7);
+      --bg-surface-solid: hsl(0, 0%, 100%);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-color-hover: rgba(0, 0, 0, 0.15);
+      --text-main: hsl(224, 25%, 12%);
+      --text-muted: hsl(215, 16%, 45%);
+      --text-inverse: hsl(210, 40%, 98%);
+
+      --color-primary: hsl(258, 76%, 55%);
+      --color-primary-hover: hsl(258, 76%, 48%);
+      --color-primary-glow: hsla(258, 76%, 55%, 0.1);
+
+      --color-success: hsl(142, 76%, 34%);
+      --color-success-hover: hsl(142, 76%, 28%);
+      --color-success-glow: hsla(142, 76%, 34%, 0.08);
+
+      --color-danger: hsl(350, 80%, 48%);
+      --color-danger-hover: hsl(350, 80%, 40%);
+      --color-danger-glow: hsla(350, 80%, 48%, 0.08);
+
+      --color-info: hsl(199, 89%, 42%);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 16px -6px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Reset Styles --- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* --- Background Glow Orbs --- */
+    .glow-orb {
+      position: fixed;
+      width: 40vw;
+      height: 40vw;
+      max-width: 500px;
+      max-height: 500px;
+      border-radius: var(--radius-full);
+      filter: blur(120px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity var(--transition-slow);
+    }
+
+    html[data-theme="light"] .glow-orb {
+      opacity: 0.08;
+    }
+
+    .orb-1 {
+      top: -10%;
+      right: 5%;
+      background: var(--color-primary);
+      animation: floatOrb1 20s infinite alternate ease-in-out;
+    }
+
+    .orb-2 {
+      bottom: 10%;
+      left: -5%;
+      background: var(--color-success);
+      animation: floatOrb2 25s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatOrb1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-5%, 8%) scale(1.1); }
+    }
+
+    @keyframes floatOrb2 {
+      0% { transform: translate(0, 0) scale(1.1); }
+      100% { transform: translate(8%, -5%) scale(0.9); }
+    }
+
+    /* --- Layout Shell --- */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        padding: var(--space-xl);
+        gap: var(--space-xl);
+      }
+    }
+
+    /* --- Header & Navigation --- */
+    .app-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (min-width: 768px) {
+      .app-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary-glow);
+      color: var(--color-primary);
+      border: 1px solid var(--border-color);
+      display: grid;
+      place-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .logo-icon:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 10px var(--color-primary-glow);
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-and-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+
+    .nav-tab {
+      background: transparent;
+      border: none;
+      padding: 6px 16px;
+      border-radius: calc(var(--radius-md) - 2px);
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .nav-tab:hover {
+      color: var(--text-main);
+    }
+
+    .nav-tab.active {
+      background: var(--bg-surface-solid);
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* --- Interactive Action Buttons --- */
+    .control-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: all var(--transition-fast);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+    }
+
+    .control-btn:hover {
+      background: var(--bg-surface-solid);
+      border-color: var(--border-color-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: grid;
+      place-content: center;
+      border-radius: var(--radius-md);
+    }
+
+    .icon-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2px;
+    }
+
+    .logout-btn {
+      color: var(--color-danger);
+    }
+    .logout-btn:hover {
+      background: var(--color-danger-glow);
+      border-color: var(--color-danger);
+    }
+
+    /* Theme switching icons */
+    html[data-theme="dark"] .sun-icon { display: block; }
+    html[data-theme="dark"] .moon-icon { display: none; }
+    html[data-theme="light"] .sun-icon { display: none; }
+    html[data-theme="light"] .moon-icon { display: block; }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      color: white;
+      display: grid;
+      place-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* --- Authentication / Login Screen --- */
+    .auth-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--space-md);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      text-align: center;
+    }
+
+    .auth-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .auth-header .logo-icon {
+      margin: 0 auto var(--space-md) auto;
+    }
+
+    .auth-header h2 {
+      font-size: 1.6rem;
+      margin-bottom: var(--space-xs);
+    }
+
+    .auth-header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --- Card Component Styles --- */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .card:hover {
+      border-color: var(--border-color-hover);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* --- Summary Cards Section --- */
+    .summary-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    @media (min-width: 576px) {
+      .summary-section {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-lg);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .summary-section {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-lg);
+      }
+    }
+
+    .summary-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .card-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-content: center;
+    }
+
+    .card-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .card-value {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: var(--space-xs) 0;
+    }
+
+    .card-meta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Card Gradient Overlays */
+    .balance-card {
+      background: linear-gradient(135deg, var(--bg-surface), hsla(258, 85%, 66%, 0.05));
+    }
+    .balance-icon {
+      background: var(--color-primary-glow);
+      color: var(--color-primary);
+    }
+
+    .income-card {
+      background: linear-gradient(135deg, var(--bg-surface), hsla(142, 72%, 40%, 0.04));
+    }
+    .income-icon {
+      background: var(--color-success-glow);
+      color: var(--color-success);
+    }
+
+    .expense-card {
+      background: linear-gradient(135deg, var(--bg-surface), hsla(350, 89%, 60%, 0.04));
+    }
+    .expense-icon {
+      background: var(--color-danger-glow);
+      color: var(--color-danger);
+    }
+
+    .transactions-count-card {
+      background: linear-gradient(135deg, var(--bg-surface), hsla(199, 89%, 48%, 0.04));
+    }
+    .count-icon {
+      background: var(--color-primary-glow);
+      color: var(--color-info);
+    }
+
+    /* --- Dashboard Grid Columns --- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    @media (min-width: 992px) {
+      .dashboard-grid {
+        grid-template-columns: 1.1fr 1.9fr;
+        gap: var(--space-xl);
+      }
+    }
+
+    .dashboard-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .card-header-simple {
+      margin-bottom: var(--space-lg);
+    }
+
+    .card-header-simple h2 {
+      font-size: 1.15rem;
+      color: var(--text-main);
+    }
+
+    /* --- Form Elements --- */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+    }
+
+    input, select {
+      width: 100%;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-glow);
+    }
+
+    input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .amount-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .currency-prefix {
+      position: absolute;
+      left: 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .amount-input-container input {
+      padding-left: 28px;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(150, 160, 180, 0.7)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 36px;
+    }
+
+    html[data-theme="light"] select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(80, 90, 100, 0.7)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    .error-msg {
+      color: var(--color-danger);
+      font-size: 0.7rem;
+      margin-top: 2px;
+      display: none;
+    }
+
+    .error input, .error select {
+      border-color: var(--color-danger) !important;
+    }
+
+    .error input:focus, .error select:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-glow) !important;
+    }
+
+    .submit-btn {
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+      width: 100%;
+      transition: all var(--transition-fast);
+      box-shadow: 0 4px 15px var(--color-primary-glow);
+    }
+
+    .submit-btn:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--color-primary-glow);
+    }
+
+    .submit-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* --- Chart Container --- */
+    .chart-canvas-container {
+      width: 100%;
+      position: relative;
+      height: 250px;
+      margin-top: var(--space-sm);
+    }
+
+    /* --- History Table Section --- */
+    .history-card {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .history-header {
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .history-header h2 {
+      font-size: 1.15rem;
+      margin-bottom: var(--space-md);
+    }
+
+    .filters-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    @media (min-width: 768px) {
+      .filters-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-box input {
+      padding-left: 36px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .filter-tab {
+      background: transparent;
+      border: none;
+      padding: 6px 14px;
+      border-radius: calc(var(--radius-md) - 2px);
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .filter-tab:hover {
+      color: var(--text-main);
+    }
+
+    .filter-tab.active {
+      background: var(--bg-surface-solid);
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .table-container {
+      position: relative;
+      overflow-x: auto;
+      max-height: 480px;
+      overflow-y: auto;
+      min-height: 250px;
+    }
+
+    .transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .transactions-table th {
+      background: var(--bg-surface);
+      position: sticky;
+      top: 0;
+      padding: 12px var(--space-lg);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 2;
+    }
+
+    .transactions-table td {
+      padding: 14px var(--space-lg);
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .transactions-table tr:hover td {
+      background: hsla(224, 25%, 35%, 0.04);
+    }
+
+    .align-right {
+      text-align: right;
+    }
+
+    .align-center {
+      text-align: center;
+    }
+
+    .title-cell-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .trans-row-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .trans-row-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--border-color);
+      color: var(--text-main);
+      text-transform: capitalize;
+    }
+
+    .amount-text {
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+
+    .amount-income {
+      color: var(--color-success);
+    }
+
+    .amount-expense {
+      color: var(--color-danger);
+    }
+
+    .delete-btn, .edit-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .delete-btn:hover {
+      background: var(--color-danger-glow);
+      color: var(--color-danger);
+    }
+
+    .edit-btn:hover {
+      background: var(--color-primary-glow);
+      color: var(--color-primary);
+    }
+
+    .delete-btn svg, .edit-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xxl) var(--space-md);
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      color: var(--text-muted);
+      opacity: 0.4;
+      margin-bottom: var(--space-md);
+    }
+
+    .empty-state-icon svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .empty-state h3 {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: var(--space-xs);
+    }
+
+    .empty-state p {
+      font-size: 0.8rem;
+      max-width: 260px;
+    }
+
+    /* --- Settings Page Panels --- */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    @media (min-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .settings-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    /* --- Footer Utilities --- */
+    .app-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: var(--space-lg);
+    }
+
+    @media (min-width: 768px) {
+      .app-footer {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-md);
+    }
+
+    .link-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+
+    .link-btn:hover {
+      color: var(--text-main);
+    }
+
+    .link-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .danger-btn:hover {
+      color: var(--color-danger);
+    }
+
+    /* --- Animations --- */
+    .slide-in-row {
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .fade-out-row {
+      animation: fadeOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); height: auto; }
+      to { opacity: 0; transform: scale(0.9); height: 0; padding-top: 0; padding-bottom: 0; border-bottom: 0; }
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: var(--radius-full);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Secure Hashed Session Login Screen -->
+  <section id="loginSection" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+            <path d="M2 20h20"></path>
+          </svg>
+        </div>
+        <h2>Welcome to LedgerLite</h2>
+        <p>Private, local-storage personal ledger with analytics</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div style="display: flex; flex-direction: column; gap: var(--space-md); text-align: left;">
+          <div class="form-group" id="loginUsernameGroup">
+            <label for="loginName">Username</label>
+            <input type="text" id="loginName" placeholder="Enter your name" value="Guest" required>
+            <span class="error-msg" id="loginNameError">Name is required</span>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword" id="passwordLabel">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+            <span class="error-msg" id="passwordError">Invalid password</span>
+          </div>
+          <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="••••••••">
+            <span class="error-msg" id="confirmPasswordError">Passwords do not match</span>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top: var(--space-lg);">
+          <span id="loginSubmitText">Enter Dashboard</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Centralized Dashboard App Interface -->
+  <div id="appSection" class="app-container" style="display: none;">
+    <!-- Fixed Navbar / Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+            <path d="M2 20h20"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>LedgerLite</h1>
+          <p class="tagline">Clean financial intelligence</p>
+        </div>
+      </div>
+
+      <div class="nav-and-controls">
+        <!-- Navigation tabs switching views -->
+        <nav class="nav-tabs">
+          <button class="nav-tab active" data-target="dashboardPage">Dashboard</button>
+          <button class="nav-tab" data-target="settingsPage">Settings</button>
+        </nav>
+
+        <div class="header-controls">
+          <!-- User Profile Display Badge -->
+          <div class="control-btn" style="cursor: default;">
+            <span class="user-avatar" id="avatarName">G</span>
+            <span class="username-display" id="userGreeting">Hello, Guest</span>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button id="themeToggle" class="control-btn icon-btn" aria-label="Toggle Theme">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Logout Button -->
+          <button id="logoutBtn" class="control-btn icon-btn logout-btn" aria-label="Log out">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page 1: Dashboard View Section -->
+    <div id="dashboardPage" class="page-content">
+      <!-- Summary Cards Grid -->
+      <section class="summary-section" style="margin-bottom: var(--space-lg);">
+        <div class="card summary-card balance-card">
+          <div class="card-header">
+            <span class="card-title">Current Balance</span>
+            <span class="card-icon balance-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-value" id="balanceValue">$0.00</div>
+          <div class="card-meta">Net cash available</div>
+        </div>
+
+        <div class="card summary-card income-card">
+          <div class="card-header">
+            <span class="card-title">Total Income</span>
+            <span class="card-icon income-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-value" id="incomeValue">$0.00</div>
+          <div class="card-meta">Earnings cumulative</div>
+        </div>
+
+        <div class="card summary-card expense-card">
+          <div class="card-header">
+            <span class="card-title">Total Expense</span>
+            <span class="card-icon expense-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />
+              </svg>
+            </span>
+          </div>
+          <div class="card-value" id="expenseValue">$0.00</div>
+          <div class="card-meta">Spending cumulative</div>
+        </div>
+
+        <div class="card summary-card transactions-count-card">
+          <div class="card-header">
+            <span class="card-title">Total Transactions</span>
+            <span class="card-icon count-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <line x1="9" y1="18" x2="15" y2="18"></line>
+                <line x1="9" y1="12" x2="15" y2="12"></line>
+                <line x1="9" y1="6" x2="15" y2="6"></line>
+                <path d="M4 21V3h16v18z"></path>
+              </svg>
+            </span>
+          </div>
+          <div class="card-value" id="transactionsCountValue">0</div>
+          <div class="card-meta">Recorded ledger entries</div>
+        </div>
+      </section>
+
+      <!-- Dashboard Main Panels Grid -->
+      <main class="dashboard-grid">
+        <!-- Left Side: Transaction Entry Form & Analytics -->
+        <div class="dashboard-column col-left">
+          <!-- Add/Edit Transaction Form Card -->
+          <div class="card form-card">
+            <div class="card-header-simple">
+              <h2 id="formHeading">Add Transaction</h2>
+            </div>
+            <form id="transactionForm" novalidate>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="transTitle">Description</label>
+                  <input type="text" id="transTitle" placeholder="e.g. Weekly Grocery Run" required maxlength="50">
+                  <span class="error-msg" id="titleError">Description is required</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="transAmount">Amount</label>
+                  <div class="amount-input-container">
+                    <span class="currency-prefix" id="formCurrencyPrefix">$</span>
+                    <input type="number" id="transAmount" placeholder="0.00" step="0.01" min="0.01" required>
+                  </div>
+                  <span class="error-msg" id="amountError">Please enter a positive number</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="transType">Type</label>
+                  <select id="transType">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="transCategory">Category</label>
+                  <select id="transCategory">
+                    <!-- Categories list -->
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="transDate">Date</label>
+                  <input type="date" id="transDate" required>
+                  <span class="error-msg" id="dateError">Invalid date selected</span>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-btn" id="formSubmitBtn">
+                <span>Add Transaction</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Cash Flow Analytics Card -->
+          <div class="card chart-card">
+            <div class="card-header-simple">
+              <h2>Cash Flow Over Time</h2>
+              <span class="chart-subtitle">Income vs Expenses over time</span>
+            </div>
+            
+            <div class="chart-canvas-container">
+              <canvas id="timeSeriesChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Filterable Transaction History List -->
+        <div class="dashboard-column col-right">
+          <div class="card history-card">
+            <div class="history-header">
+              <h2>Transaction History</h2>
+              <div class="filters-container">
+                <!-- Search -->
+                <div class="search-box">
+                  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="searchBar" placeholder="Search transactions...">
+                </div>
+                
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                  <button class="filter-tab active" data-filter="all">All</button>
+                  <button class="filter-tab" data-filter="income">Income</button>
+                  <button class="filter-tab" data-filter="expense">Expenses</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="transactions-table">
+                <thead>
+                  <tr>
+                    <th>Transaction</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th class="align-right">Amount</th>
+                    <th class="align-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionList">
+                  <!-- Generated Dynamically -->
+                </tbody>
+              </table>
+
+              <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3>No Transactions Found</h3>
+                <p>Start tracking your cash flow by adding your first transaction!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- Footer Area (Inside Dashboard to hide on Settings page) -->
+      <footer class="app-footer">
+        <p>&copy; 2026 LedgerLite. Self-Contained Local Ledger.</p>
+        <div>Privacy-First LocalStorage Vault</div>
+      </footer>
+    </div>
+
+    <!-- Page 2: Settings View Section -->
+    <div id="settingsPage" class="page-content" style="display: none;">
+      <div class="settings-grid">
+        <!-- Profile Settings Card -->
+        <div class="card">
+          <div class="card-header-simple">
+            <h2>User Settings</h2>
+            <span class="chart-subtitle">Customize profile and display properties</span>
+          </div>
+          <form id="settingsForm">
+            <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <div class="form-group">
+                <label for="profileName">Username</label>
+                <input type="text" id="profileName" placeholder="Guest" required maxlength="25">
+              </div>
+              <div class="form-group">
+                <label for="profileCurrency">Preferred Currency</label>
+                <select id="profileCurrency">
+                  <option value="USD">USD ($) - US Dollar</option>
+                  <option value="EUR">EUR (€) - Euro</option>
+                  <option value="GBP">GBP (£) - British Pound</option>
+                  <option value="INR">INR (₹) - Indian Rupee</option>
+                  <option value="JPY">JPY (¥) - Japanese Yen</option>
+                </select>
+              </div>
+              <button type="submit" class="submit-btn" style="margin-top: var(--space-sm);">
+                <span>Save Settings</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Database & Backup Management -->
+        <div class="card">
+          <div class="card-header-simple">
+            <h2>Database Utilities</h2>
+            <span class="chart-subtitle">Backup, restore, or wipe local records</span>
+          </div>
+          <div class="settings-actions">
+            <button id="exportBtn" class="control-btn" style="justify-content: center; width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export Ledger Data (JSON)
+            </button>
+            
+            <button id="importBtn" class="control-btn" style="justify-content: center; width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Import Ledger Data (JSON)
+            </button>
+            
+            <button id="resetAllBtn" class="control-btn logout-btn" style="justify-content: center; width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Reset All Transactions
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- Hidden File Input for Data Import -->
+  <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+  <!-- Master JavaScript Script Block -->
+  <script>
+    // --- 1. Global Specifications & Data structures ---
+    const HARDCODED_CATEGORIES = [
+      'Food & Dining',
+      'Shopping',
+      'Recharge & Bills',
+      'Petrol & Auto',
+      'Utilities',
+      'Salary',
+      'Entertainment',
+      'Other'
+    ];
+
+    const STORAGE_KEY = 'ledgerlite_state_single';
+
+    const DEFAULT_STATE = {
+      userProfile: {
+        name: 'Guest',
+        currency: 'USD',
+        theme: 'dark'
+      },
+      transactions: []
+    };
+
+    // Central State Object
+    let state = {
+      userProfile: { name: 'Guest', currency: 'USD', theme: 'dark' },
+      transactions: []
+    };
+
+    // Global Active State Holders
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let activeEditId = null;
+    let activeChartInstance = null;
+    const activeAnimations = new Map();
+
+    // --- 2. Storage synchronization wrapper ---
+    function loadState() {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        state = {
+          userProfile: parsed.userProfile || { ...DEFAULT_STATE.userProfile },
+          transactions: parsed.transactions || []
+        };
+      } catch (e) {
+        console.warn('LocalStorage data reading failed. Restoring default structure.', e);
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+    }
+
+    function saveState() {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('LocalStorage write failed:', e);
+        if (e.name === 'QuotaExceededError') {
+          alert('Local Storage quota exceeded. Data could not be persisted.');
+        }
+      }
+    }
+
+    // --- 3. Formatters & Escapers ---
+    const CURRENCY_LOCALES = {
+      USD: 'en-US',
+      EUR: 'de-DE',
+      GBP: 'en-GB',
+      INR: 'en-IN',
+      JPY: 'ja-JP'
+    };
+
+    function formatCurrency(amount) {
+      const code = state.userProfile.currency || 'USD';
+      const locale = CURRENCY_LOCALES[code] || 'en-US';
+      try {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: code
+        }).format(amount);
+      } catch (e) {
+        const symbols = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
+        const symbol = symbols[code] || '$';
+        return `${symbol}${parseFloat(amount).toFixed(2)}`;
+      }
+    }
+
+    function getCurrencySymbol() {
+      const code = state.userProfile.currency || 'USD';
+      const symbols = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
+      return symbols[code] || '$';
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    // --- 4. Count-up Animate Metrics ---
+    function animateNumberUpdate(elementId, endValue, isCurrency = true) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      if (activeAnimations.has(elementId)) {
+        cancelAnimationFrame(activeAnimations.get(elementId));
+      }
+
+      let currentValueText = element.textContent.replace(/[^0-9.-]/g, '');
+      let startValue = parseFloat(currentValueText) || 0;
+
+      const duration = 800; // milliseconds
+      const startTime = performance.now();
+      const isNeg = endValue < 0;
+      const absEnd = Math.abs(endValue);
+      const absStart = Math.abs(startValue);
+
+      const step = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic Ease Out
+        
+        const currentAbs = absStart + (absEnd - absStart) * easeProgress;
+        const current = isNeg ? -currentAbs : currentAbs;
+
+        if (isCurrency) {
+          element.textContent = formatCurrency(current);
+        } else {
+          element.textContent = Math.round(current).toLocaleString();
+        }
+
+        if (progress < 1) {
+          activeAnimations.set(elementId, requestAnimationFrame(step));
+        } else {
+          if (isCurrency) {
+            element.textContent = formatCurrency(endValue);
+          } else {
+            element.textContent = Math.round(endValue).toLocaleString();
+          }
+          activeAnimations.delete(elementId);
+        }
+      };
+
+      activeAnimations.set(elementId, requestAnimationFrame(step));
+    }
+
+    // --- 5. Chart.js Management ---
+    function drawChart() {
+      const canvas = document.getElementById('timeSeriesChart');
+      if (!canvas) return;
+
+      // 1. Safe Destroy Existing Instance
+      if (activeChartInstance) {
+        activeChartInstance.destroy();
+        activeChartInstance = null;
+      }
+
+      const transactions = state.transactions || [];
+      
+      let dates, incomes, expenses, isPlaceholder = false;
+
+      if (transactions.length === 0) {
+        isPlaceholder = true;
+        dates = ['No Data Yet'];
+        incomes = [0];
+        expenses = [0];
+      } else {
+        // Group and sort data by date ascending
+        const sortedTxs = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+        const dailyMetrics = {};
+
+        sortedTxs.forEach(t => {
+          if (!dailyMetrics[t.date]) {
+            dailyMetrics[t.date] = { income: 0, expense: 0 };
+          }
+          if (t.type === 'income') {
+            dailyMetrics[t.date].income += t.amount;
+          } else {
+            dailyMetrics[t.date].expense += t.amount;
+          }
+        });
+
+        dates = Object.keys(dailyMetrics);
+        incomes = dates.map(d => dailyMetrics[d].income);
+        expenses = dates.map(d => dailyMetrics[d].expense);
+      }
+
+      // Light vs Dark theme colors for chart layout
+      const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+      const textColor = isDark ? 'hsl(215, 20%, 65%)' : 'hsl(215, 16%, 45%)';
+
+      const incomeColor = isPlaceholder 
+        ? (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)')
+        : 'hsl(142, 72%, 40%)';
+      const expenseColor = isPlaceholder 
+        ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)')
+        : 'hsl(350, 89%, 60%)';
+
+      const ctx = canvas.getContext('2d');
+      activeChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: isPlaceholder ? dates : dates.map(d => formatDate(d)),
+          datasets: [
+            {
+              label: isPlaceholder ? 'No Income' : 'Income',
+              data: incomes,
+              backgroundColor: incomeColor,
+              borderRadius: 6,
+              borderSkipped: false
+            },
+            {
+              label: isPlaceholder ? 'No Expenses' : 'Expense',
+              data: expenses,
+              backgroundColor: expenseColor,
+              borderRadius: 6,
+              borderSkipped: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: textColor,
+                font: { family: 'Plus Jakarta Sans', weight: '600' }
+              }
+            },
+            tooltip: {
+              enabled: !isPlaceholder,
+              backgroundColor: isDark ? 'hsl(224, 25%, 12%)' : 'rgba(255, 255, 255, 0.95)',
+              titleColor: isDark ? 'white' : 'black',
+              bodyColor: isDark ? 'hsl(210, 40%, 98%)' : 'black',
+              borderColor: gridColor,
+              borderWidth: 1
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                color: textColor,
+                font: { family: 'Plus Jakarta Sans', size: 10 }
+              }
+            },
+            y: {
+              grid: { color: gridColor },
+              ticks: {
+                color: textColor,
+                font: { family: 'Plus Jakarta Sans', size: 10 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // --- 6. Rendering Logic ---
+    function updateCategoryDropdown(selectedCategory = '') {
+      const select = document.getElementById('transCategory');
+      if (!select) return;
+
+      select.innerHTML = HARDCODED_CATEGORIES
+        .map(cat => `<option value="${escapeHTML(cat)}" ${cat === selectedCategory ? 'selected' : ''}>${escapeHTML(cat)}</option>`)
+        .join('');
+    }
+
+    function renderSummary() {
+      let income = 0;
+      let expense = 0;
+
+      state.transactions.forEach(t => {
+        if (t.type === 'income') {
+          income += t.amount;
+        } else {
+          expense += t.amount;
+        }
+      });
+
+      const balance = income - expense;
+
+      // Animate numbers
+      animateNumberUpdate('balanceValue', balance, true);
+      animateNumberUpdate('incomeValue', income, true);
+      animateNumberUpdate('expenseValue', expense, true);
+      animateNumberUpdate('transactionsCountValue', state.transactions.length, false);
+
+      // Color border balance card
+      const balanceCard = document.querySelector('.balance-card');
+      if (balanceCard) {
+        if (balance < 0) {
+          balanceCard.style.borderLeft = '4px solid var(--color-danger)';
+        } else if (balance > 0) {
+          balanceCard.style.borderLeft = '4px solid var(--color-success)';
+        } else {
+          balanceCard.style.borderLeft = 'none';
+        }
+      }
+    }
+
+    function renderTransactions() {
+      const listBody = document.getElementById('transactionList');
+      const emptyState = document.getElementById('emptyState');
+      if (!listBody) return;
+
+      let filtered = state.transactions || [];
+
+      // Type Filter
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(t => t.type === currentFilter);
+      }
+
+      // Search Filter
+      if (currentSearch.trim()) {
+        const query = currentSearch.toLowerCase().trim();
+        filtered = filtered.filter(t => 
+          t.title.toLowerCase().includes(query) || 
+          t.category.toLowerCase().includes(query)
+        );
+      }
+
+      if (filtered.length === 0) {
+        listBody.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'flex';
+        return;
+      }
+
+      if (emptyState) emptyState.style.display = 'none';
+
+      // Capture existing element ids to avoid animations flashing on active list items
+      const existingRows = document.querySelectorAll('[data-id]', listBody);
+      const existingIds = new Set([...existingRows].map(el => el.dataset.id));
+
+      const fragment = document.createDocumentFragment();
+
+      filtered.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = t.id;
+
+        // Slide animation for new transaction items
+        if (existingIds.size > 0 && !existingIds.has(t.id)) {
+          tr.classList.add('slide-in-row');
+        }
+
+        const isIncome = t.type === 'income';
+        const formattedAmount = `${isIncome ? '+' : '-'} ${formatCurrency(t.amount)}`;
+        const amountClass = isIncome ? 'amount-income' : 'amount-expense';
+
+        tr.innerHTML = `
+          <td>
+            <div class="title-cell-wrapper">
+              <span class="trans-row-title">${escapeHTML(t.title)}</span>
+              <span class="trans-row-subtitle">${escapeHTML(t.type)}</span>
+            </div>
+          </td>
+          <td>
+            <span class="category-badge">${escapeHTML(t.category)}</span>
+          </td>
+          <td>${formatDate(t.date)}</td>
+          <td class="align-right amount-text ${amountClass}">${formattedAmount}</td>
+          <td class="align-center" style="white-space: nowrap;">
+            <button class="edit-btn" data-id="${t.id}" aria-label="Edit transaction">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+            <button class="delete-btn" data-id="${t.id}" aria-label="Delete transaction">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </td>
+        `;
+        fragment.appendChild(tr);
+      });
+
+      listBody.innerHTML = '';
+      listBody.appendChild(fragment);
+    }
+
+    function renderThemeAndProfile() {
+      const theme = state.userProfile.theme || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      
+      const greet = document.getElementById('userGreeting');
+      const avatar = document.getElementById('avatarName');
+      
+      if (greet) greet.textContent = `Hello, ${escapeHTML(state.userProfile.name)}`;
+      if (avatar) avatar.textContent = state.userProfile.name ? state.userProfile.name.charAt(0) : 'G';
+      
+      const currencyPrefix = document.getElementById('formCurrencyPrefix');
+      if (currencyPrefix) currencyPrefix.textContent = getCurrencySymbol();
+    }
+
+    function refreshAll() {
+      renderThemeAndProfile();
+      renderSummary();
+      renderTransactions();
+      drawChart();
+    }
+
+    // --- 7. Navigation Control (ShowPage) ---
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page-content').forEach(page => {
+        page.style.display = 'none';
+      });
+
+      // Show targeted page
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) targetPage.style.display = 'block';
+
+      // Update Nav Class active status
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        if (tab.dataset.target === pageId) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+
+      // Redraw charts if switching back to dashboard
+      if (pageId === 'dashboardPage') {
+        drawChart();
+      }
+    }
+
+    // --- 8. Edit / Add Form Mode State Machine ---
+    function setFormMode(mode, transaction = null) {
+      const heading = document.getElementById('formHeading');
+      const submitBtn = document.getElementById('formSubmitBtn');
+      const submitBtnText = submitBtn.querySelector('span');
+      let cancelBtn = document.getElementById('cancelEditBtn');
+
+      if (mode === 'edit' && transaction) {
+        activeEditId = transaction.id;
+        if (heading) heading.textContent = 'Edit Transaction';
+        if (submitBtnText) submitBtnText.textContent = 'Update Transaction';
+
+        // Prepopulate form fields
+        document.getElementById('transTitle').value = transaction.title;
+        document.getElementById('transAmount').value = transaction.amount;
+        document.getElementById('transType').value = transaction.type;
+        document.getElementById('transCategory').value = transaction.category;
+        document.getElementById('transDate').value = transaction.date;
+
+        // Inject dynamic Cancel button
+        if (!cancelBtn && submitBtn) {
+          cancelBtn = document.createElement('button');
+          cancelBtn.type = 'button';
+          cancelBtn.id = 'cancelEditBtn';
+          cancelBtn.className = 'control-btn';
+          cancelBtn.style.marginTop = 'var(--space-md)';
+          cancelBtn.style.width = '100%';
+          cancelBtn.style.justifyContent = 'center';
+          cancelBtn.textContent = 'Cancel Edit';
+          cancelBtn.addEventListener('click', () => {
+            setFormMode('add');
+          });
+          submitBtn.parentNode.appendChild(cancelBtn);
+        }
+
+        document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        activeEditId = null;
+        if (heading) heading.textContent = 'Add Transaction';
+        if (submitBtnText) submitBtnText.textContent = 'Add Transaction';
+
+        // Clear values
+        document.getElementById('transTitle').value = '';
+        document.getElementById('transAmount').value = '';
+        document.getElementById('transType').value = 'expense';
+        updateCategoryDropdown();
+        document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+
+        if (cancelBtn) {
+          cancelBtn.remove();
+        }
+      }
+    }
+
+    // --- 9. Cryptographic Authentication & Expiration (Web Crypto API) ---
+    async function hashPassword(password, saltHex) {
+      const encoder = new TextEncoder();
+      const passwordBytes = encoder.encode(password);
+      const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+      
+      const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
+      combined.set(saltBytes);
+      combined.set(passwordBytes, saltBytes.length);
+      
+      const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function generateRandomHex(bytesCount) {
+      const bytes = new Uint8Array(bytesCount);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function startSecureSession() {
+      const token = generateRandomHex(16);
+      const expires = Date.now() + 2 * 60 * 60 * 1000; // 2 hours expiration
+      window.localStorage.setItem('ledgerlite_session_token', token);
+      window.localStorage.setItem('ledgerlite_session_expires', String(expires));
+    }
+
+    function isSessionValid() {
+      const token = window.localStorage.getItem('ledgerlite_session_token');
+      const expiresStr = window.localStorage.getItem('ledgerlite_session_expires');
+      if (!token || !expiresStr) return false;
+      
+      const expires = parseInt(expiresStr, 10);
+      if (isNaN(expires) || Date.now() >= expires) {
+        clearSession();
+        return false;
+      }
+      return true;
+    }
+
+    function clearSession() {
+      window.localStorage.removeItem('ledgerlite_session_token');
+      window.localStorage.removeItem('ledgerlite_session_expires');
+    }
+
+    function updateAuthUI() {
+      const hasAccount = window.localStorage.getItem('ledgerlite_hash') !== null;
+      const titleEl = document.querySelector('.auth-header h2');
+      const descEl = document.querySelector('.auth-header p');
+      const confirmGroup = document.getElementById('confirmPasswordGroup');
+      const submitText = document.getElementById('loginSubmitText');
+      const usernameInput = document.getElementById('loginName');
+      
+      // Reset errors
+      document.querySelectorAll('.auth-container .form-group').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.auth-container .error-msg').forEach(el => el.style.display = 'none');
+
+      if (hasAccount) {
+        titleEl.textContent = 'Welcome Back';
+        descEl.textContent = 'Enter your master password to unlock your personal ledger.';
+        confirmGroup.style.display = 'none';
+        submitText.textContent = 'Unlock Ledger';
+        
+        try {
+          const raw = window.localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.userProfile && parsed.userProfile.name) {
+              usernameInput.value = parsed.userProfile.name;
+              usernameInput.disabled = true;
+            }
+          }
+        } catch (e) {
+          usernameInput.value = 'Guest';
+        }
+      } else {
+        titleEl.textContent = 'Create Master Account';
+        descEl.textContent = 'Set up a secure master password to protect your local ledger data.';
+        confirmGroup.style.display = 'block';
+        submitText.textContent = 'Create Account & Enter';
+        usernameInput.value = 'Guest';
+        usernameInput.disabled = false;
+      }
+    }
+
+    function checkSessionAuth() {
+      const loginSection = document.getElementById('loginSection');
+      const appSection = document.getElementById('appSection');
+
+      if (isSessionValid()) {
+        loginSection.style.display = 'none';
+        appSection.style.display = 'flex';
+        loadState();
+        refreshAll();
+      } else {
+        loginSection.style.display = 'flex';
+        appSection.style.display = 'none';
+        updateAuthUI();
+        if (activeChartInstance) {
+          activeChartInstance.destroy();
+          activeChartInstance = null;
+        }
+      }
+    }
+
+    // --- 10. Actions / Event Handlers ---
+    function setupEventListeners() {
+      // Login Form Submission (Async Web Crypto flows)
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Reset Error Visuals
+        document.querySelectorAll('.auth-container .form-group').forEach(el => el.classList.remove('error'));
+        document.querySelectorAll('.auth-container .error-msg').forEach(el => el.style.display = 'none');
+
+        const usernameInput = document.getElementById('loginName');
+        const passwordInput = document.getElementById('loginPassword');
+        const confirmInput = document.getElementById('confirmPassword');
+        const hasAccount = window.localStorage.getItem('ledgerlite_hash') !== null;
+
+        let valid = true;
+
+        if (!hasAccount && !usernameInput.value.trim()) {
+          usernameInput.closest('.form-group').classList.add('error');
+          document.getElementById('loginNameError').style.display = 'block';
+          valid = false;
+        }
+
+        if (!passwordInput.value) {
+          passwordInput.closest('.form-group').classList.add('error');
+          document.getElementById('passwordError').textContent = 'Password is required';
+          document.getElementById('passwordError').style.display = 'block';
+          valid = false;
+        }
+
+        if (!hasAccount) {
+          if (passwordInput.value !== confirmInput.value) {
+            confirmInput.closest('.form-group').classList.add('error');
+            document.getElementById('confirmPasswordError').style.display = 'block';
+            valid = false;
+          }
+        }
+
+        if (!valid) return;
+
+        try {
+          if (!hasAccount) {
+            // First time setup - Create Master Account
+            const salt = generateRandomHex(16);
+            const hash = await hashPassword(passwordInput.value, salt);
+
+            window.localStorage.setItem('ledgerlite_salt', salt);
+            window.localStorage.setItem('ledgerlite_hash', hash);
+
+            // Save default profile data
+            loadState();
+            state.userProfile.name = usernameInput.value.trim();
+            saveState();
+          } else {
+            // Standard login verification
+            const salt = window.localStorage.getItem('ledgerlite_salt');
+            const expectedHash = window.localStorage.getItem('ledgerlite_hash');
+            const hash = await hashPassword(passwordInput.value, salt);
+
+            if (hash !== expectedHash) {
+              passwordInput.closest('.form-group').classList.add('error');
+              document.getElementById('passwordError').textContent = 'Incorrect password';
+              document.getElementById('passwordError').style.display = 'block';
+              return;
+            }
+          }
+
+          // Establish secure session
+          await startSecureSession();
+          passwordInput.value = '';
+          if (confirmInput) confirmInput.value = '';
+          checkSessionAuth();
+        } catch (err) {
+          console.error(err);
+          alert('An unexpected security error occurred during authentication.');
+        }
+      });
+
+      // Logout button click
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        clearSession();
+        setFormMode('add');
+        checkSessionAuth();
+      });
+
+      // Navigation tab tabs
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          showPage(e.target.dataset.target);
+        });
+      });
+
+      // Transaction submit handler
+      document.getElementById('transactionForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Reset Error Visuals
+        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
+        document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+
+        const title = document.getElementById('transTitle').value.trim();
+        const amount = parseFloat(document.getElementById('transAmount').value);
+        const type = document.getElementById('transType').value;
+        const category = document.getElementById('transCategory').value;
+        const date = document.getElementById('transDate').value;
+
+        let valid = true;
+
+        if (!title) {
+          document.getElementById('transTitle').closest('.form-group').classList.add('error');
+          document.getElementById('titleError').style.display = 'block';
+          valid = false;
+        }
+        if (isNaN(amount) || amount <= 0) {
+          document.getElementById('transAmount').closest('.form-group').classList.add('error');
+          document.getElementById('amountError').style.display = 'block';
+          valid = false;
+        }
+        if (!date) {
+          document.getElementById('transDate').closest('.form-group').classList.add('error');
+          document.getElementById('dateError').style.display = 'block';
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        if (activeEditId) {
+          // Update Mode
+          const idx = state.transactions.findIndex(t => t.id === activeEditId);
+          if (idx !== -1) {
+            state.transactions[idx] = {
+              id: activeEditId,
+              title,
+              amount,
+              type,
+              category,
+              date
+            };
+          }
+          setFormMode('add');
+        } else {
+          // Add Mode
+          const newTx = {
+            id: 'tx_' + Date.now() + Math.random().toString(36).substring(2, 9),
+            title,
+            amount,
+            type,
+            category,
+            date
+          };
+          state.transactions.unshift(newTx);
+        }
+
+        saveState();
+        refreshAll();
+
+        // Clear Add input fields
+        document.getElementById('transTitle').value = '';
+        document.getElementById('transAmount').value = '';
+        document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+      });
+
+      // Actions Column Event Delegation (Edit/Delete)
+      document.getElementById('transactionList').addEventListener('click', (e) => {
+        const editBtn = e.target.closest('.edit-btn');
+        if (editBtn) {
+          const id = editBtn.dataset.id;
+          const tx = state.transactions.find(t => t.id === id);
+          if (tx) {
+            setFormMode('edit', tx);
+          }
+          return;
+        }
+
+        const deleteBtn = e.target.closest('.delete-btn');
+        if (!deleteBtn) return;
+
+        const id = deleteBtn.dataset.id;
+        const row = deleteBtn.closest('tr');
+        if (row && id) {
+          if (activeEditId === id) {
+            setFormMode('add');
+          }
+          row.classList.add('fade-out-row');
+          row.addEventListener('animationend', () => {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            saveState();
+            refreshAll();
+          }, { once: true });
+        }
+      });
+
+      // Search input changes
+      document.getElementById('searchBar').addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        renderTransactions();
+      });
+
+      // Filter tabs switching
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          currentFilter = e.target.dataset.filter;
+          renderTransactions();
+        });
+      });
+
+      // Theme toggle button
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const currentTheme = state.userProfile.theme || 'dark';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        state.userProfile.theme = nextTheme;
+        saveState();
+        renderThemeAndProfile();
+        // Redraw chart to update axis labels colours
+        drawChart();
+      });
+
+      // Settings profile form submission
+      document.getElementById('settingsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const profileName = document.getElementById('profileName').value.trim();
+        const profileCurrency = document.getElementById('profileCurrency').value;
+
+        if (!profileName) {
+          alert('Username is required.');
+          return;
+        }
+
+        state.userProfile.name = profileName;
+        state.userProfile.currency = profileCurrency;
+        saveState();
+        refreshAll();
+        alert('Settings updated successfully!');
+        showPage('dashboardPage');
+      });
+
+      // Export ledger JSON utility
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        const dataStr = JSON.stringify(state, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `fintrack_ledger_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      // Import ledger JSON trigger
+      document.getElementById('importBtn').addEventListener('click', () => {
+        document.getElementById('importFileInput').click();
+      });
+
+      document.getElementById('importFileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON format');
+            
+            state.userProfile = parsed.userProfile || { ...DEFAULT_STATE.userProfile };
+            state.transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
+            
+            saveState();
+            refreshAll();
+            alert('Ledger data restored successfully!');
+          } catch (err) {
+            alert('Restore failed: ' + err.message);
+          }
+          document.getElementById('importFileInput').value = '';
+        };
+        reader.readAsText(file);
+      });
+
+      // Reset transactions click handler
+      document.getElementById('resetAllBtn').addEventListener('click', () => {
+        const check = confirm('Are you sure you want to delete all transaction entries? Settings will be preserved.');
+        if (check) {
+          state.transactions = [];
+          setFormMode('add');
+          saveState();
+          refreshAll();
+        }
+      });
+    }
+
+    // --- 11. Initial Run Setup ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate inputs with current settings
+      loadState();
+      
+      const profileNameInput = document.getElementById('profileName');
+      const profileCurrencySelect = document.getElementById('profileCurrency');
+      if (profileNameInput) profileNameInput.value = state.userProfile.name;
+      if (profileCurrencySelect) profileCurrencySelect.value = state.userProfile.currency;
+      
+      // Default Date
+      document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+
+      // Setup drop-down categories
+      updateCategoryDropdown();
+
+      // Hook up UI element triggers
+      setupEventListeners();
+
+      // Check session
+      checkSessionAuth();
+    });
+  </script>
+</body>
+</html>
