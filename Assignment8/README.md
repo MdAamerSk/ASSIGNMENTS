@@ -44,7 +44,7 @@ A comprehensive educational project demonstrating **advanced CSS design systems*
 
 ## Live Deployment Link
 
-https://assignments-45d3tcyof-mdaamersks-projects.vercel.app/
+https://assignments-bs0blsj5g-mdaamersks-projects.vercel.app/
 
 ---
 
