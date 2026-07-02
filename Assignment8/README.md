@@ -44,7 +44,7 @@ A comprehensive educational project demonstrating **advanced CSS design systems*
 
 ## Live Deployment Link
 
-https://mdaamersk.github.io/ASSIGNMENTS/Assignment8/
+assignments-git-main-mdaamersks-projects.vercel.app
 
 ---
 
