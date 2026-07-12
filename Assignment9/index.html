@@ -235,48 +235,120 @@
                                 <i class="ri-calendar-todo-line feature-icon" style="color: var(--accent-planner);"></i>
                                 <h2>Hourly Planner</h2>
                             </div>
-                            <button class="back-btn"><i class="ri-home-4-line"></i> Home</button>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <button id="planner-clear-all-btn" class="back-btn" style="color: var(--accent-pomodoro); border-color: var(--accent-pomodoro-alpha);" title="Wipe entire schedule"><i class="ri-delete-bin-3-line"></i> Clear Day</button>
+                                <button class="back-btn"><i class="ri-home-4-line"></i> Home</button>
+                            </div>
                         </div>
                         <p class="feature-subtitle">Map out your daily activities chronologically. All changes auto-save instantly.</p>
                     </div>
 
                     <!-- Hourly blocks layout (Static blueprint for early rendering) -->
                     <div class="planner-grid" id="planner-grid">
+                        <div class="planner-slot" data-hour="07">
+                            <div class="planner-time">07:00 AM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="07" aria-label="Planner entry for 07:00 AM">
+                                <button class="planner-clear-btn" data-clear="07" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="planner-slot" data-hour="08">
+                            <div class="planner-time">08:00 AM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="08" aria-label="Planner entry for 08:00 AM">
+                                <button class="planner-clear-btn" data-clear="08" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
                         <div class="planner-slot" data-hour="09">
                             <div class="planner-time">09:00 AM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="09">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="09" aria-label="Planner entry for 09:00 AM">
+                                <button class="planner-clear-btn" data-clear="09" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="10">
                             <div class="planner-time">10:00 AM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="10">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="10" aria-label="Planner entry for 10:00 AM">
+                                <button class="planner-clear-btn" data-clear="10" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="11">
                             <div class="planner-time">11:00 AM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="11">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="11" aria-label="Planner entry for 11:00 AM">
+                                <button class="planner-clear-btn" data-clear="11" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="12">
                             <div class="planner-time">12:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="12">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="12" aria-label="Planner entry for 12:00 PM">
+                                <button class="planner-clear-btn" data-clear="12" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="13">
                             <div class="planner-time">01:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="13">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="13" aria-label="Planner entry for 01:00 PM">
+                                <button class="planner-clear-btn" data-clear="13" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="14">
                             <div class="planner-time">02:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="14">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="14" aria-label="Planner entry for 02:00 PM">
+                                <button class="planner-clear-btn" data-clear="14" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="15">
                             <div class="planner-time">03:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="15">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="15" aria-label="Planner entry for 03:00 PM">
+                                <button class="planner-clear-btn" data-clear="15" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="16">
                             <div class="planner-time">04:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="16">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="16" aria-label="Planner entry for 04:00 PM">
+                                <button class="planner-clear-btn" data-clear="16" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                         <div class="planner-slot" data-hour="17">
                             <div class="planner-time">05:00 PM</div>
-                            <input type="text" class="planner-input" placeholder="Plan something..." data-slot="17">
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="17" aria-label="Planner entry for 05:00 PM">
+                                <button class="planner-clear-btn" data-clear="17" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="planner-slot" data-hour="18">
+                            <div class="planner-time">06:00 PM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="18" aria-label="Planner entry for 06:00 PM">
+                                <button class="planner-clear-btn" data-clear="18" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="planner-slot" data-hour="19">
+                            <div class="planner-time">07:00 PM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="19" aria-label="Planner entry for 07:00 PM">
+                                <button class="planner-clear-btn" data-clear="19" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="planner-slot" data-hour="20">
+                            <div class="planner-time">08:00 PM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="20" aria-label="Planner entry for 08:00 PM">
+                                <button class="planner-clear-btn" data-clear="20" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="planner-slot" data-hour="21">
+                            <div class="planner-time">09:00 PM</div>
+                            <div class="planner-input-wrapper">
+                                <input type="text" class="planner-input" placeholder="Plan something..." data-slot="21" aria-label="Planner entry for 09:00 PM">
+                                <button class="planner-clear-btn" data-clear="21" title="Clear slot"><i class="ri-close-line"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>

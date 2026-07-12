@@ -763,13 +763,48 @@ body[data-theme="light"] .telemetry-badge {
     color: var(--text-secondary);
 }
 
+.planner-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
 .planner-input {
     flex: 1;
     border: none !important;
     background: transparent !important;
     border-radius: 0 !important;
     padding: 0.75rem !important;
+    padding-right: 2.2rem !important;
     box-shadow: none !important;
+    width: 100%;
+}
+
+.planner-clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition-smooth);
+    opacity: 0;
+}
+
+.planner-slot:hover .planner-clear-btn,
+.planner-input-wrapper:focus-within .planner-clear-btn {
+    opacity: 1;
+}
+
+.planner-clear-btn:hover {
+    color: var(--accent-pomodoro);
+    background: var(--bg-hover);
 }
 
 /* MODULE C: DAILY GOALS MODULE */

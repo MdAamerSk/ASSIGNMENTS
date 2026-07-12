@@ -435,7 +435,37 @@ const PlannerModule = {
             input.addEventListener('input', (event) => {
                 this.saveSlot(timeId, event.target.value);
             });
+
+            // Bind Enter key to submit/blur input fields (Step 22)
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    input.blur();
+                }
+            });
         });
+
+        // Set up individual slot clear button event delegation (Step 25)
+        const grid = document.getElementById('planner-grid');
+        if (grid) {
+            grid.addEventListener('click', (event) => {
+                const clearBtn = event.target.closest('.planner-clear-btn');
+                if (clearBtn) {
+                    const timeId = clearBtn.getAttribute('data-clear');
+                    this.clearSlot(timeId);
+                }
+            });
+        }
+
+        // Set up global clear day button click listener (Step 25)
+        const clearAllBtn = document.getElementById('planner-clear-all-btn');
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => {
+                if (confirm("Are you sure you want to clear the entire daily schedule?")) {
+                    this.clearAllSlots();
+                }
+            });
+        }
 
         // Highlight the current time slot using the Date Object.
         this.highlightCurrentHour();
@@ -470,6 +500,25 @@ const PlannerModule = {
         this.updateHomePreview();
     },
 
+    // Clears a single time slot (Step 25)
+    clearSlot(timeId) {
+        const input = document.querySelector(`.planner-input[data-slot="${timeId}"]`);
+        if (input) {
+            input.value = "";
+        }
+        this.saveSlot(timeId, "");
+    },
+
+    // Clears the entire daily schedule (Step 25)
+    clearAllSlots() {
+        const inputs = document.querySelectorAll('.planner-input');
+        inputs.forEach(input => {
+            input.value = "";
+        });
+        Store.savePlans({});
+        this.updateHomePreview();
+    },
+
     // Dynamically updates the home page preview widget showing current or upcoming activities.
     updateHomePreview() {
         const previewEl = document.getElementById('planner-home-preview');
@@ -482,7 +531,7 @@ const PlannerModule = {
         let foundHour = null;
 
         // Loop forward starting from the current hour to find active or upcoming events
-        for (let h = currentHour; h <= 17; h++) {
+        for (let h = currentHour; h <= 21; h++) {
             const hStr = String(h).padStart(2, '0');
             if (savedPlans[hStr] && savedPlans[hStr].trim() !== "") {
                 foundPlan = savedPlans[hStr].trim();
@@ -493,7 +542,7 @@ const PlannerModule = {
 
         // Fallback: look for any activity entered elsewhere in the planner (e.g. earlier hours)
         if (!foundPlan) {
-            for (let h = 9; h <= 17; h++) {
+            for (let h = 7; h <= 21; h++) {
                 const hStr = String(h).padStart(2, '0');
                 if (savedPlans[hStr] && savedPlans[hStr].trim() !== "") {
                     foundPlan = savedPlans[hStr].trim();
@@ -1302,7 +1351,7 @@ const App = {
         let foundHour = null;
 
         // Loop forward starting from the current hour to find active or upcoming events
-        for (let h = currentHour; h <= 17; h++) {
+        for (let h = currentHour; h <= 21; h++) {
             const hStr = String(h).padStart(2, '0');
             if (savedPlans[hStr] && savedPlans[hStr].trim() !== "") {
                 foundPlan = savedPlans[hStr].trim();
@@ -1313,7 +1362,7 @@ const App = {
 
         // Fallback: look for any activity entered elsewhere in the planner (e.g. earlier hours)
         if (!foundPlan) {
-            for (let h = 9; h <= 17; h++) {
+            for (let h = 7; h <= 21; h++) {
                 const hStr = String(h).padStart(2, '0');
                 if (savedPlans[hStr] && savedPlans[hStr].trim() !== "") {
                     foundPlan = savedPlans[hStr].trim();
