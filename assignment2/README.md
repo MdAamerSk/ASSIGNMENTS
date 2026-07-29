@@ -1,6 +1,6 @@
 # UI Layout Brush-Up: HTML & CSS (Assignment 2)
 
-This project is a collection of three web page layouts built entirely with pure HTML and CSS. It was developed as a hands-on exercise  to brush up on fundamental web structural concepts and layout techniques. Specifically, it focuses on using traditional Absolute and Relative positioning, deliberately solving layout challenges without relying on modern frameworks like Flexbox or CSS Grid.
+This project is a collection of three web page layouts built entirely with pure HTML and CSS. It was developed as a hands-on exercise by a developer to brush up on fundamental web structural concepts and layout techniques. Specifically, it focuses on using traditional Absolute and Relative positioning, deliberately solving layout challenges without relying on modern frameworks like Flexbox or CSS Grid.
 
 ## 🛠️ Built With
 
@@ -22,18 +22,15 @@ Below are the visual outputs for the three different layouts.
 <!-- TODO: Upload your output image for index.html here -->
 <img width="1763" height="1308" alt="image" src="https://github.com/user-attachments/assets/1c10b4ab-50fd-4477-844a-4b39eb3b3875" />
 
-
 ### Layout 2 (`index2.html`)
 
 <!-- TODO: Upload your output image for index2.html here -->
 <img width="1763" height="1016" alt="image" src="https://github.com/user-attachments/assets/ba750a40-8265-42fd-b56b-3748ce59b8ca" />
 
-
 ### Layout 3 (`index3.html`)
 
 <!-- TODO: Upload your output image for index3.html here -->
 <img width="1763" height="844" alt="image" src="https://github.com/user-attachments/assets/75128b84-217e-457e-abf8-e1bafcf15bf3" />
-
 
 ## 💡 Key Learnings & Brush-Up Topics
 

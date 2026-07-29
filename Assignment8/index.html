@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LedgerLite: Personal Finance Tracker with Expense Analytics</title>
-  
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Chart.js CDN -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* --- Design Tokens & Theme Colors --- */
     :root {
-      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-
+      --font-display: 'Outfit', sans-serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
       --space-xs: 0.25rem;
       --space-sm: 0.5rem;
       --space-md: 1rem;
       --space-lg: 1.5rem;
       --space-xl: 2rem;
       --space-xxl: 3rem;
-
       --radius-sm: 8px;
       --radius-md: 14px;
       --radius-lg: 20px;
       --radius-full: 9999px;
-
       --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       --glass-blur: 16px;
     }
 
-    /* Dark Mode Defaults */
     html[data-theme="dark"] {
       --bg-app: hsl(224, 25%, 8%);
       --bg-surface: hsla(224, 25%, 12%, 0.65);
@@ -47,26 +40,19 @@
       --text-main: hsl(210, 40%, 98%);
       --text-muted: hsl(215, 20%, 65%);
       --text-inverse: hsl(224, 25%, 12%);
-
       --color-primary: hsl(258, 85%, 66%);
       --color-primary-hover: hsl(258, 85%, 72%);
       --color-primary-glow: hsla(258, 85%, 66%, 0.15);
-
       --color-success: hsl(142, 72%, 40%);
-      --color-success-hover: hsl(142, 72%, 46%);
       --color-success-glow: hsla(142, 72%, 40%, 0.12);
-
       --color-danger: hsl(350, 89%, 60%);
-      --color-danger-hover: hsl(350, 89%, 66%);
       --color-danger-glow: hsla(350, 89%, 60%, 0.12);
-
       --color-info: hsl(199, 89%, 48%);
       --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 16px -6px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
       --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
 
-    /* Light Mode Overrides */
     html[data-theme="light"] {
       --bg-app: hsl(210, 40%, 96%);
       --bg-surface: rgba(255, 255, 255, 0.7);
@@ -76,27 +62,22 @@
       --text-main: hsl(224, 25%, 12%);
       --text-muted: hsl(215, 16%, 45%);
       --text-inverse: hsl(210, 40%, 98%);
-
       --color-primary: hsl(258, 76%, 55%);
       --color-primary-hover: hsl(258, 76%, 48%);
       --color-primary-glow: hsla(258, 76%, 55%, 0.1);
-
       --color-success: hsl(142, 76%, 34%);
-      --color-success-hover: hsl(142, 76%, 28%);
       --color-success-glow: hsla(142, 76%, 34%, 0.08);
-
       --color-danger: hsl(350, 80%, 48%);
-      --color-danger-hover: hsl(350, 80%, 40%);
       --color-danger-glow: hsla(350, 80%, 48%, 0.08);
-
       --color-info: hsl(199, 89%, 42%);
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 16px -6px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
     }
 
-    /* --- Reset Styles --- */
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -113,25 +94,25 @@
       line-height: 1.5;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3 {
       font-family: var(--font-display);
       font-weight: 600;
       letter-spacing: -0.02em;
     }
 
-    /* --- Background Glow Orbs --- */
+    /* Background Glow Orbs */
     .glow-orb {
       position: fixed;
       width: 40vw;
       height: 40vw;
-      max-width: 500px;
-      max-height: 500px;
+      max-width: 450px;
       border-radius: var(--radius-full);
       filter: blur(120px);
       opacity: 0.15;
       pointer-events: none;
       z-index: 0;
-      transition: opacity var(--transition-slow);
     }
 
     html[data-theme="light"] .glow-orb {
@@ -142,27 +123,37 @@
       top: -10%;
       right: 5%;
       background: var(--color-primary);
-      animation: floatOrb1 20s infinite alternate ease-in-out;
+      animation: fOrb1 20s infinite alternate ease-in-out;
     }
 
     .orb-2 {
       bottom: 10%;
       left: -5%;
       background: var(--color-success);
-      animation: floatOrb2 25s infinite alternate ease-in-out;
+      animation: fOrb2 25s infinite alternate ease-in-out;
     }
 
-    @keyframes floatOrb1 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-5%, 8%) scale(1.1); }
+    @keyframes fOrb1 {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(-5%, 8%) scale(1.1);
+      }
     }
 
-    @keyframes floatOrb2 {
-      0% { transform: translate(0, 0) scale(1.1); }
-      100% { transform: translate(8%, -5%) scale(0.9); }
+    @keyframes fOrb2 {
+      0% {
+        transform: translate(0, 0) scale(1.1);
+      }
+
+      100% {
+        transform: translate(8%, -5%) scale(0.9);
+      }
     }
 
-    /* --- Layout Shell --- */
+    /* Layout Containers */
     .app-container {
       position: relative;
       z-index: 1;
@@ -181,7 +172,7 @@
       }
     }
 
-    /* --- Header & Navigation --- */
+    /* Navbar & Header */
     .app-header {
       display: flex;
       flex-direction: column;
@@ -283,7 +274,7 @@
       gap: var(--space-xs);
     }
 
-    /* --- Interactive Action Buttons --- */
+    /* Control Buttons */
     .control-btn {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
@@ -327,16 +318,27 @@
     .logout-btn {
       color: var(--color-danger);
     }
+
     .logout-btn:hover {
       background: var(--color-danger-glow);
       border-color: var(--color-danger);
     }
 
-    /* Theme switching icons */
-    html[data-theme="dark"] .sun-icon { display: block; }
-    html[data-theme="dark"] .moon-icon { display: none; }
-    html[data-theme="light"] .sun-icon { display: none; }
-    html[data-theme="light"] .moon-icon { display: block; }
+    html[data-theme="dark"] .sun-icon {
+      display: block;
+    }
+
+    html[data-theme="dark"] .moon-icon {
+      display: none;
+    }
+
+    html[data-theme="light"] .sun-icon {
+      display: none;
+    }
+
+    html[data-theme="light"] .moon-icon {
+      display: block;
+    }
 
     .user-avatar {
       width: 24px;
@@ -351,7 +353,17 @@
       text-transform: uppercase;
     }
 
-    /* --- Authentication / Login Screen --- */
+    .username-display {
+      display: none;
+    }
+
+    @media (min-width: 576px) {
+      .username-display {
+        display: inline;
+      }
+    }
+
+    /* Auth Screen styling */
     .auth-container {
       display: flex;
       align-items: center;
@@ -391,7 +403,7 @@
       color: var(--text-muted);
     }
 
-    /* --- Card Component Styles --- */
+    /* Cards */
     .card {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
@@ -410,7 +422,7 @@
       box-shadow: var(--shadow-lg);
     }
 
-    /* --- Summary Cards Section --- */
+    /* Summaries Grid */
     .summary-section {
       display: grid;
       grid-template-columns: 1fr;
@@ -478,10 +490,11 @@
       color: var(--text-muted);
     }
 
-    /* Card Gradient Overlays */
+    /* Summary Gradients */
     .balance-card {
       background: linear-gradient(135deg, var(--bg-surface), hsla(258, 85%, 66%, 0.05));
     }
+
     .balance-icon {
       background: var(--color-primary-glow);
       color: var(--color-primary);
@@ -490,6 +503,7 @@
     .income-card {
       background: linear-gradient(135deg, var(--bg-surface), hsla(142, 72%, 40%, 0.04));
     }
+
     .income-icon {
       background: var(--color-success-glow);
       color: var(--color-success);
@@ -498,6 +512,7 @@
     .expense-card {
       background: linear-gradient(135deg, var(--bg-surface), hsla(350, 89%, 60%, 0.04));
     }
+
     .expense-icon {
       background: var(--color-danger-glow);
       color: var(--color-danger);
@@ -506,12 +521,13 @@
     .transactions-count-card {
       background: linear-gradient(135deg, var(--bg-surface), hsla(199, 89%, 48%, 0.04));
     }
+
     .count-icon {
       background: var(--color-primary-glow);
       color: var(--color-info);
     }
 
-    /* --- Dashboard Grid Columns --- */
+    /* Dashboard Layout */
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -541,7 +557,7 @@
       color: var(--text-main);
     }
 
-    /* --- Form Elements --- */
+    /* Form Controls */
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -566,7 +582,8 @@
       color: var(--text-muted);
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
       background: var(--bg-app);
       border: 1px solid var(--border-color);
@@ -579,7 +596,8 @@
       outline: none;
     }
 
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       border-color: var(--color-primary);
       box-shadow: 0 0 0 3px var(--color-primary-glow);
     }
@@ -628,11 +646,13 @@
       display: none;
     }
 
-    .error input, .error select {
+    .error input,
+    .error select {
       border-color: var(--color-danger) !important;
     }
 
-    .error input:focus, .error select:focus {
+    .error input:focus,
+    .error select:focus {
       box-shadow: 0 0 0 3px var(--color-danger-glow) !important;
     }
 
@@ -667,7 +687,7 @@
       height: 16px;
     }
 
-    /* --- Chart Container --- */
+    /* Chart styles */
     .chart-canvas-container {
       width: 100%;
       position: relative;
@@ -675,7 +695,14 @@
       margin-top: var(--space-sm);
     }
 
-    /* --- History Table Section --- */
+    .chart-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Ledger Table History */
     .history-card {
       padding: 0;
       display: flex;
@@ -847,7 +874,8 @@
       color: var(--color-danger);
     }
 
-    .delete-btn, .edit-btn {
+    .delete-btn,
+    .edit-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
@@ -870,11 +898,13 @@
       color: var(--color-primary);
     }
 
-    .delete-btn svg, .edit-btn svg {
+    .delete-btn svg,
+    .edit-btn svg {
       width: 16px;
       height: 16px;
     }
 
+    /* Empty display state */
     .empty-state {
       display: none;
       flex-direction: column;
@@ -907,7 +937,7 @@
       max-width: 260px;
     }
 
-    /* --- Settings Page Panels --- */
+    /* Settings view configurations */
     .settings-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -927,7 +957,7 @@
       margin-top: var(--space-md);
     }
 
-    /* --- Footer Utilities --- */
+    /* Footer styling */
     .app-footer {
       display: flex;
       flex-direction: column;
@@ -949,41 +979,7 @@
       }
     }
 
-    .footer-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--space-md);
-    }
-
-    .link-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-      font-size: 0.78rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all var(--transition-fast);
-    }
-
-    .link-btn:hover {
-      color: var(--text-main);
-    }
-
-    .link-btn svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .danger-btn:hover {
-      color: var(--color-danger);
-    }
-
-    /* --- Animations --- */
+    /* Row Animations */
     .slide-in-row {
       animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
@@ -993,43 +989,65 @@
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fadeOut {
-      from { opacity: 1; transform: scale(1); height: auto; }
-      to { opacity: 0; transform: scale(0.9); height: 0; padding-top: 0; padding-bottom: 0; border-bottom: 0; }
+      from {
+        opacity: 1;
+        transform: scale(1);
+        height: auto;
+      }
+
+      to {
+        opacity: 0;
+        transform: scale(0.9);
+        height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
     }
 
-    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
       background: var(--border-color);
       border-radius: var(--radius-full);
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--text-muted);
     }
   </style>
 </head>
+
 <body>
-  <!-- Ambient background glow elements -->
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
 
-  <!-- Secure Hashed Session Login Screen -->
+  <!-- Authenticated Session Login Form -->
   <section id="loginSection" class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
         <div class="logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -1060,7 +1078,8 @@
         </div>
         <button type="submit" class="submit-btn" style="margin-top: var(--space-lg);">
           <span id="loginSubmitText">Enter Dashboard</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14" />
           </svg>
         </button>
@@ -1068,13 +1087,13 @@
     </div>
   </section>
 
-  <!-- Centralized Dashboard App Interface -->
+  <!-- Core Dashboard App Layout -->
   <div id="appSection" class="app-container" style="display: none;">
-    <!-- Fixed Navbar / Header -->
     <header class="app-header">
       <div class="brand">
         <div class="logo-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -1088,22 +1107,20 @@
       </div>
 
       <div class="nav-and-controls">
-        <!-- Navigation tabs switching views -->
         <nav class="nav-tabs">
           <button class="nav-tab active" data-target="dashboardPage">Dashboard</button>
           <button class="nav-tab" data-target="settingsPage">Settings</button>
         </nav>
 
         <div class="header-controls">
-          <!-- User Profile Display Badge -->
           <div class="control-btn" style="cursor: default;">
             <span class="user-avatar" id="avatarName">G</span>
             <span class="username-display" id="userGreeting">Hello, Guest</span>
           </div>
 
-          <!-- Theme Toggle -->
           <button id="themeToggle" class="control-btn icon-btn" aria-label="Toggle Theme">
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
               <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -1114,15 +1131,17 @@
               <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
 
-          <!-- Logout Button -->
           <button id="logoutBtn" class="control-btn icon-btn logout-btn" aria-label="Log out">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
           </button>
         </div>
@@ -1131,14 +1150,15 @@
 
     <!-- Page 1: Dashboard View Section -->
     <div id="dashboardPage" class="page-content">
-      <!-- Summary Cards Grid -->
       <section class="summary-section" style="margin-bottom: var(--space-lg);">
         <div class="card summary-card balance-card">
           <div class="card-header">
             <span class="card-title">Current Balance</span>
             <span class="card-icon balance-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
             </span>
           </div>
@@ -1150,7 +1170,8 @@
           <div class="card-header">
             <span class="card-title">Total Income</span>
             <span class="card-icon income-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </span>
@@ -1163,7 +1184,8 @@
           <div class="card-header">
             <span class="card-title">Total Expense</span>
             <span class="card-icon expense-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" />
               </svg>
             </span>
@@ -1176,7 +1198,8 @@
           <div class="card-header">
             <span class="card-title">Total Transactions</span>
             <span class="card-icon count-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2.5">
                 <line x1="9" y1="18" x2="15" y2="18"></line>
                 <line x1="9" y1="12" x2="15" y2="12"></line>
                 <line x1="9" y1="6" x2="15" y2="6"></line>
@@ -1189,11 +1212,9 @@
         </div>
       </section>
 
-      <!-- Dashboard Main Panels Grid -->
       <main class="dashboard-grid">
-        <!-- Left Side: Transaction Entry Form & Analytics -->
         <div class="dashboard-column col-left">
-          <!-- Add/Edit Transaction Form Card -->
+          <!-- Add Transaction Form -->
           <div class="card form-card">
             <div class="card-header-simple">
               <h2 id="formHeading">Add Transaction</h2>
@@ -1205,7 +1226,6 @@
                   <input type="text" id="transTitle" placeholder="e.g. Weekly Grocery Run" required maxlength="50">
                   <span class="error-msg" id="titleError">Description is required</span>
                 </div>
-
                 <div class="form-group">
                   <label for="transAmount">Amount</label>
                   <div class="amount-input-container">
@@ -1214,7 +1234,6 @@
                   </div>
                   <span class="error-msg" id="amountError">Please enter a positive number</span>
                 </div>
-
                 <div class="form-group">
                   <label for="transType">Type</label>
                   <select id="transType">
@@ -1222,24 +1241,20 @@
                     <option value="income">Income</option>
                   </select>
                 </div>
-
                 <div class="form-group">
                   <label for="transCategory">Category</label>
-                  <select id="transCategory">
-                    <!-- Categories list -->
-                  </select>
+                  <select id="transCategory"></select>
                 </div>
-
                 <div class="form-group">
                   <label for="transDate">Date</label>
                   <input type="date" id="transDate" required>
                   <span class="error-msg" id="dateError">Invalid date selected</span>
                 </div>
               </div>
-
               <button type="submit" class="submit-btn" id="formSubmitBtn">
                 <span>Add Transaction</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -1247,35 +1262,30 @@
             </form>
           </div>
 
-          <!-- Cash Flow Analytics Card -->
+          <!-- Timeseries Chart -->
           <div class="card chart-card">
             <div class="card-header-simple">
               <h2>Cash Flow Over Time</h2>
               <span class="chart-subtitle">Income vs Expenses over time</span>
             </div>
-            
-            <div class="chart-canvas-container">
-              <canvas id="timeSeriesChart"></canvas>
-            </div>
+            <div class="chart-canvas-container"><canvas id="timeSeriesChart"></canvas></div>
           </div>
         </div>
 
-        <!-- Right Side: Filterable Transaction History List -->
+        <!-- Right Column: Ledger List -->
         <div class="dashboard-column col-right">
           <div class="card history-card">
             <div class="history-header">
               <h2>Transaction History</h2>
               <div class="filters-container">
-                <!-- Search -->
                 <div class="search-box">
-                  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                   </svg>
                   <input type="text" id="searchBar" placeholder="Search transactions...">
                 </div>
-                
-                <!-- Filter Tabs -->
                 <div class="filter-tabs">
                   <button class="filter-tab active" data-filter="all">All</button>
                   <button class="filter-tab" data-filter="income">Income</button>
@@ -1295,15 +1305,15 @@
                     <th class="align-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="transactionList">
-                  <!-- Generated Dynamically -->
-                </tbody>
+                <tbody id="transactionList"></tbody>
               </table>
 
               <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
                 <h3>No Transactions Found</h3>
@@ -1313,7 +1323,7 @@
           </div>
         </div>
       </main>
-      <!-- Footer Area (Inside Dashboard to hide on Settings page) -->
+
       <footer class="app-footer">
         <p>&copy; 2026 LedgerLite. Self-Contained Local Ledger.</p>
         <div>Privacy-First LocalStorage Vault</div>
@@ -1323,7 +1333,6 @@
     <!-- Page 2: Settings View Section -->
     <div id="settingsPage" class="page-content" style="display: none;">
       <div class="settings-grid">
-        <!-- Profile Settings Card -->
         <div class="card">
           <div class="card-header-simple">
             <h2>User Settings</h2>
@@ -1352,7 +1361,7 @@
           </form>
         </div>
 
-        <!-- Database & Backup Management -->
+        <!-- Database Backups -->
         <div class="card">
           <div class="card-header-simple">
             <h2>Database Utilities</h2>
@@ -1360,22 +1369,26 @@
           </div>
           <div class="settings-actions">
             <button id="exportBtn" class="control-btn" style="justify-content: center; width: 100%;">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
               Export Ledger Data (JSON)
             </button>
-            
             <button id="importBtn" class="control-btn" style="justify-content: center; width: 100%;">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
               Import Ledger Data (JSON)
             </button>
-            
             <button id="resetAllBtn" class="control-btn logout-btn" style="justify-content: center; width: 100%;">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2" style="width:16px; height:16px;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
               Reset All Transactions
             </button>
@@ -1383,941 +1396,417 @@
         </div>
       </div>
     </div>
-
-
   </div>
 
-  <!-- Hidden File Input for Data Import -->
   <input type="file" id="importFileInput" accept=".json" style="display: none;">
 
-  <!-- Master JavaScript Script Block -->
+  <!-- Compressed JavaScript Logic -->
   <script>
-    // --- 1. Global Specifications & Data structures ---
-    const HARDCODED_CATEGORIES = [
-      'Food & Dining',
-      'Shopping',
-      'Recharge & Bills',
-      'Petrol & Auto',
-      'Utilities',
-      'Salary',
-      'Entertainment',
-      'Other'
-    ];
-
+    const HARDCODED_CATEGORIES = ['Food & Dining', 'Shopping', 'Recharge & Bills', 'Petrol & Auto', 'Utilities', 'Salary', 'Entertainment', 'Other'];
     const STORAGE_KEY = 'ledgerlite_state_single';
+    const DEFAULT_STATE = { userProfile: { name: 'Guest', currency: 'USD', theme: 'dark' }, transactions: [] };
 
-    const DEFAULT_STATE = {
-      userProfile: {
-        name: 'Guest',
-        currency: 'USD',
-        theme: 'dark'
-      },
-      transactions: []
-    };
-
-    // Central State Object
-    let state = {
-      userProfile: { name: 'Guest', currency: 'USD', theme: 'dark' },
-      transactions: []
-    };
-
-    // Global Active State Holders
-    let currentFilter = 'all';
-    let currentSearch = '';
-    let activeEditId = null;
-    let activeChartInstance = null;
+    let state = { userProfile: { name: 'Guest', currency: 'USD', theme: 'dark' }, transactions: [] };
+    let currentFilter = 'all', currentSearch = '', activeEditId = null, activeChartInstance = null;
     const activeAnimations = new Map();
 
-    // --- 2. Storage synchronization wrapper ---
+    const qs = s => document.querySelector(s);
+    const qsa = s => document.querySelectorAll(s);
+
+    // --- State Storage wrapper ---
     function loadState() {
       try {
         const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-          return;
-        }
-        const parsed = JSON.parse(raw);
-        state = {
-          userProfile: parsed.userProfile || { ...DEFAULT_STATE.userProfile },
-          transactions: parsed.transactions || []
-        };
+        state = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_STATE));
+        if (!state.userProfile) state.userProfile = { ...DEFAULT_STATE.userProfile };
+        if (!state.transactions) state.transactions = [];
       } catch (e) {
-        console.warn('LocalStorage data reading failed. Restoring default structure.', e);
         state = JSON.parse(JSON.stringify(DEFAULT_STATE));
       }
     }
+    const saveState = () => { try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { } };
 
-    function saveState() {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        console.error('LocalStorage write failed:', e);
-        if (e.name === 'QuotaExceededError') {
-          alert('Local Storage quota exceeded. Data could not be persisted.');
-        }
-      }
+    // --- Crypto Web Auth wrappers ---
+    async function hashPassword(password, saltHex) {
+      const encoder = new TextEncoder(), passwordBytes = encoder.encode(password);
+      const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+      const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
+      combined.set(saltBytes); combined.set(passwordBytes, saltBytes.length);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    const generateRandomHex = count => Array.from(crypto.getRandomValues(new Uint8Array(count))).map(b => b.toString(16).padStart(2, '0')).join('');
+
+    async function startSecureSession() {
+      window.localStorage.setItem('ledgerlite_session_token', generateRandomHex(16));
+      window.localStorage.setItem('ledgerlite_session_expires', String(Date.now() + 7200000));
+    }
+    function isSessionValid() {
+      const token = window.localStorage.getItem('ledgerlite_session_token'), expires = parseInt(window.localStorage.getItem('ledgerlite_session_expires'), 10);
+      if (!token || isNaN(expires) || Date.now() >= expires) { clearSession(); return false; }
+      return true;
+    }
+    function clearSession() {
+      window.localStorage.removeItem('ledgerlite_session_token');
+      window.localStorage.removeItem('ledgerlite_session_expires');
     }
 
-    // --- 3. Formatters & Escapers ---
-    const CURRENCY_LOCALES = {
-      USD: 'en-US',
-      EUR: 'de-DE',
-      GBP: 'en-GB',
-      INR: 'en-IN',
-      JPY: 'ja-JP'
-    };
-
+    // --- Formatters ---
+    const CURRENCY_LOCALES = { USD: 'en-US', EUR: 'de-DE', GBP: 'en-GB', INR: 'en-IN', JPY: 'ja-JP' };
     function formatCurrency(amount) {
-      const code = state.userProfile.currency || 'USD';
-      const locale = CURRENCY_LOCALES[code] || 'en-US';
-      try {
-        return new Intl.NumberFormat(locale, {
-          style: 'currency',
-          currency: code
-        }).format(amount);
-      } catch (e) {
-        const symbols = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
-        const symbol = symbols[code] || '$';
-        return `${symbol}${parseFloat(amount).toFixed(2)}`;
-      }
+      const c = state.userProfile.currency || 'USD';
+      try { return new Intl.NumberFormat(CURRENCY_LOCALES[c] || 'en-US', { style: 'currency', currency: c }).format(amount); }
+      catch (e) { return `${{ USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' }[c] || '$'}${parseFloat(amount).toFixed(2)}`; }
     }
+    const getCurrencySymbol = () => ({ USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' }[state.userProfile.currency] || '$');
+    const escapeHTML = str => !str ? '' : String(str).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c] || c));
+    const formatDate = dStr => !dStr ? '' : new Date(dStr).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 
-    function getCurrencySymbol() {
-      const code = state.userProfile.currency || 'USD';
-      const symbols = { USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥' };
-      return symbols[code] || '$';
-    }
+    // --- Animations ---
+    function animateNumberUpdate(id, end, isCurrency = true) {
+      const el = qs('#' + id); if (!el) return;
+      if (activeAnimations.has(id)) cancelAnimationFrame(activeAnimations.get(id));
 
-    function escapeHTML(str) {
-      if (!str) return '';
-      return String(str).replace(/[&<>'"]/g, 
-        tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag)
-      );
-    }
-
-    function formatDate(dateString) {
-      if (!dateString) return '';
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return dateString;
-      return date.toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    }
-
-    // --- 4. Count-up Animate Metrics ---
-    function animateNumberUpdate(elementId, endValue, isCurrency = true) {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-
-      if (activeAnimations.has(elementId)) {
-        cancelAnimationFrame(activeAnimations.get(elementId));
-      }
-
-      let currentValueText = element.textContent.replace(/[^0-9.-]/g, '');
-      let startValue = parseFloat(currentValueText) || 0;
-
-      const duration = 800; // milliseconds
-      const startTime = performance.now();
-      const isNeg = endValue < 0;
-      const absEnd = Math.abs(endValue);
-      const absStart = Math.abs(startValue);
-
-      const step = (now) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic Ease Out
-        
-        const currentAbs = absStart + (absEnd - absStart) * easeProgress;
-        const current = isNeg ? -currentAbs : currentAbs;
-
-        if (isCurrency) {
-          element.textContent = formatCurrency(current);
-        } else {
-          element.textContent = Math.round(current).toLocaleString();
-        }
-
-        if (progress < 1) {
-          activeAnimations.set(elementId, requestAnimationFrame(step));
-        } else {
-          if (isCurrency) {
-            element.textContent = formatCurrency(endValue);
-          } else {
-            element.textContent = Math.round(endValue).toLocaleString();
-          }
-          activeAnimations.delete(elementId);
-        }
+      const start = parseFloat(el.textContent.replace(/[^0-9.-]/g, '')) || 0, dur = 800, startT = performance.now();
+      const step = now => {
+        const prog = Math.min((now - startT) / dur, 1), ease = 1 - Math.pow(1 - prog, 3), val = start + (end - start) * ease;
+        el.textContent = isCurrency ? formatCurrency(val) : Math.round(val).toLocaleString();
+        if (prog < 1) activeAnimations.set(id, requestAnimationFrame(step));
+        else { el.textContent = isCurrency ? formatCurrency(end) : Math.round(end).toLocaleString(); activeAnimations.delete(id); }
       };
-
-      activeAnimations.set(elementId, requestAnimationFrame(step));
+      activeAnimations.set(id, requestAnimationFrame(step));
     }
 
-    // --- 5. Chart.js Management ---
+    // --- Chart.js rendering ---
     function drawChart() {
-      const canvas = document.getElementById('timeSeriesChart');
-      if (!canvas) return;
+      const canvas = qs('#timeSeriesChart'); if (!canvas) return;
+      if (activeChartInstance) activeChartInstance.destroy();
 
-      // 1. Safe Destroy Existing Instance
-      if (activeChartInstance) {
-        activeChartInstance.destroy();
-        activeChartInstance = null;
-      }
+      const txs = state.transactions || [], isPlaceholder = txs.length === 0;
+      let dates, incomes, expenses;
 
-      const transactions = state.transactions || [];
-      
-      let dates, incomes, expenses, isPlaceholder = false;
-
-      if (transactions.length === 0) {
-        isPlaceholder = true;
-        dates = ['No Data Yet'];
-        incomes = [0];
-        expenses = [0];
+      if (isPlaceholder) {
+        dates = ['No Data Yet']; incomes = [0]; expenses = [0];
       } else {
-        // Group and sort data by date ascending
-        const sortedTxs = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
-        const dailyMetrics = {};
-
-        sortedTxs.forEach(t => {
-          if (!dailyMetrics[t.date]) {
-            dailyMetrics[t.date] = { income: 0, expense: 0 };
-          }
-          if (t.type === 'income') {
-            dailyMetrics[t.date].income += t.amount;
-          } else {
-            dailyMetrics[t.date].expense += t.amount;
-          }
+        const sorted = [...txs].sort((a, b) => new Date(a.date) - new Date(b.date)), daily = {};
+        sorted.forEach(t => {
+          if (!daily[t.date]) daily[t.date] = { inc: 0, exp: 0 };
+          t.type === 'income' ? daily[t.date].inc += t.amount : daily[t.date].exp += t.amount;
         });
-
-        dates = Object.keys(dailyMetrics);
-        incomes = dates.map(d => dailyMetrics[d].income);
-        expenses = dates.map(d => dailyMetrics[d].expense);
+        dates = Object.keys(daily); incomes = dates.map(d => daily[d].inc); expenses = dates.map(d => daily[d].exp);
       }
 
-      // Light vs Dark theme colors for chart layout
       const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-      const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
-      const textColor = isDark ? 'hsl(215, 20%, 65%)' : 'hsl(215, 16%, 45%)';
+      const gridC = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+      const textC = isDark ? 'hsl(215, 20%, 65%)' : 'hsl(215, 16%, 45%)';
+      const incC = isPlaceholder ? (isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)') : 'hsl(142, 72%, 40%)';
+      const expC = isPlaceholder ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)') : 'hsl(350, 89%, 60%)';
 
-      const incomeColor = isPlaceholder 
-        ? (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)')
-        : 'hsl(142, 72%, 40%)';
-      const expenseColor = isPlaceholder 
-        ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)')
-        : 'hsl(350, 89%, 60%)';
-
-      const ctx = canvas.getContext('2d');
-      activeChartInstance = new Chart(ctx, {
+      activeChartInstance = new Chart(canvas.getContext('2d'), {
         type: 'bar',
         data: {
           labels: isPlaceholder ? dates : dates.map(d => formatDate(d)),
           datasets: [
-            {
-              label: isPlaceholder ? 'No Income' : 'Income',
-              data: incomes,
-              backgroundColor: incomeColor,
-              borderRadius: 6,
-              borderSkipped: false
-            },
-            {
-              label: isPlaceholder ? 'No Expenses' : 'Expense',
-              data: expenses,
-              backgroundColor: expenseColor,
-              borderRadius: 6,
-              borderSkipped: false
-            }
+            { label: isPlaceholder ? 'No Income' : 'Income', data: incomes, backgroundColor: incC, borderRadius: 6, borderSkipped: false },
+            { label: isPlaceholder ? 'No Expenses' : 'Expense', data: expenses, backgroundColor: expC, borderRadius: 6, borderSkipped: false }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false,
           plugins: {
-            legend: {
-              labels: {
-                color: textColor,
-                font: { family: 'Plus Jakarta Sans', weight: '600' }
-              }
-            },
-            tooltip: {
-              enabled: !isPlaceholder,
-              backgroundColor: isDark ? 'hsl(224, 25%, 12%)' : 'rgba(255, 255, 255, 0.95)',
-              titleColor: isDark ? 'white' : 'black',
-              bodyColor: isDark ? 'hsl(210, 40%, 98%)' : 'black',
-              borderColor: gridColor,
-              borderWidth: 1
-            }
+            legend: { labels: { color: textC, font: { family: 'Plus Jakarta Sans', weight: '600' } } },
+            tooltip: { enabled: !isPlaceholder, backgroundColor: isDark ? 'hsl(224, 25%, 12%)' : 'rgba(255,255,255,0.95)', titleColor: isDark ? '#fff' : '#000', bodyColor: isDark ? 'hsl(210, 40%, 98%)' : '#000', borderColor: gridC, borderWidth: 1 }
           },
           scales: {
-            x: {
-              grid: { display: false },
-              ticks: {
-                color: textColor,
-                font: { family: 'Plus Jakarta Sans', size: 10 }
-              }
-            },
-            y: {
-              grid: { color: gridColor },
-              ticks: {
-                color: textColor,
-                font: { family: 'Plus Jakarta Sans', size: 10 }
-              }
-            }
+            x: { grid: { display: false }, ticks: { color: textC, font: { family: 'Plus Jakarta Sans', size: 10 } } },
+            y: { grid: { color: gridC }, ticks: { color: textC, font: { family: 'Plus Jakarta Sans', size: 10 } } }
           }
         }
       });
     }
 
-    // --- 6. Rendering Logic ---
-    function updateCategoryDropdown(selectedCategory = '') {
-      const select = document.getElementById('transCategory');
-      if (!select) return;
-
-      select.innerHTML = HARDCODED_CATEGORIES
-        .map(cat => `<option value="${escapeHTML(cat)}" ${cat === selectedCategory ? 'selected' : ''}>${escapeHTML(cat)}</option>`)
-        .join('');
-    }
+    // --- Render updates ---
+    const updateCategoryDropdown = selected => {
+      qs('#transCategory').innerHTML = HARDCODED_CATEGORIES.map(c => `<option value="${escapeHTML(c)}" ${c === selected ? 'selected' : ''}>${escapeHTML(c)}</option>`).join('');
+    };
 
     function renderSummary() {
-      let income = 0;
-      let expense = 0;
+      let inc = 0, exp = 0;
+      state.transactions.forEach(t => t.type === 'income' ? inc += t.amount : exp += t.amount);
+      animateNumberUpdate('balanceValue', inc - exp); animateNumberUpdate('incomeValue', inc); animateNumberUpdate('expenseValue', exp); animateNumberUpdate('transactionsCountValue', state.transactions.length, false);
 
-      state.transactions.forEach(t => {
-        if (t.type === 'income') {
-          income += t.amount;
-        } else {
-          expense += t.amount;
-        }
-      });
-
-      const balance = income - expense;
-
-      // Animate numbers
-      animateNumberUpdate('balanceValue', balance, true);
-      animateNumberUpdate('incomeValue', income, true);
-      animateNumberUpdate('expenseValue', expense, true);
-      animateNumberUpdate('transactionsCountValue', state.transactions.length, false);
-
-      // Color border balance card
-      const balanceCard = document.querySelector('.balance-card');
-      if (balanceCard) {
-        if (balance < 0) {
-          balanceCard.style.borderLeft = '4px solid var(--color-danger)';
-        } else if (balance > 0) {
-          balanceCard.style.borderLeft = '4px solid var(--color-success)';
-        } else {
-          balanceCard.style.borderLeft = 'none';
-        }
-      }
+      const balC = qs('.balance-card');
+      if (balC) balC.style.borderLeft = (inc - exp < 0) ? '4px solid var(--color-danger)' : (inc - exp > 0) ? '4px solid var(--color-success)' : 'none';
     }
 
     function renderTransactions() {
-      const listBody = document.getElementById('transactionList');
-      const emptyState = document.getElementById('emptyState');
-      if (!listBody) return;
+      const list = qs('#transactionList'), empty = qs('#emptyState'); if (!list) return;
+      let txs = state.transactions || [];
 
-      let filtered = state.transactions || [];
+      if (currentFilter !== 'all') txs = txs.filter(t => t.type === currentFilter);
+      if (currentSearch.trim()) { const q = currentSearch.toLowerCase().trim(); txs = txs.filter(t => t.title.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)); }
 
-      // Type Filter
-      if (currentFilter !== 'all') {
-        filtered = filtered.filter(t => t.type === currentFilter);
-      }
+      if (txs.length === 0) { list.innerHTML = ''; if (empty) empty.style.display = 'flex'; return; }
+      if (empty) empty.style.display = 'none';
 
-      // Search Filter
-      if (currentSearch.trim()) {
-        const query = currentSearch.toLowerCase().trim();
-        filtered = filtered.filter(t => 
-          t.title.toLowerCase().includes(query) || 
-          t.category.toLowerCase().includes(query)
-        );
-      }
+      const existingIds = new Set([...qsa('[data-id]', list)].map(el => el.dataset.id)), frag = document.createDocumentFragment();
 
-      if (filtered.length === 0) {
-        listBody.innerHTML = '';
-        if (emptyState) emptyState.style.display = 'flex';
-        return;
-      }
+      txs.forEach(t => {
+        const tr = document.createElement('tr'); tr.dataset.id = t.id;
+        if (existingIds.size > 0 && !existingIds.has(t.id)) tr.classList.add('slide-in-row');
 
-      if (emptyState) emptyState.style.display = 'none';
-
-      // Capture existing element ids to avoid animations flashing on active list items
-      const existingRows = document.querySelectorAll('[data-id]', listBody);
-      const existingIds = new Set([...existingRows].map(el => el.dataset.id));
-
-      const fragment = document.createDocumentFragment();
-
-      filtered.forEach(t => {
-        const tr = document.createElement('tr');
-        tr.dataset.id = t.id;
-
-        // Slide animation for new transaction items
-        if (existingIds.size > 0 && !existingIds.has(t.id)) {
-          tr.classList.add('slide-in-row');
-        }
-
-        const isIncome = t.type === 'income';
-        const formattedAmount = `${isIncome ? '+' : '-'} ${formatCurrency(t.amount)}`;
-        const amountClass = isIncome ? 'amount-income' : 'amount-expense';
-
+        const isInc = t.type === 'income', amt = `${isInc ? '+' : '-'} ${formatCurrency(t.amount)}`;
         tr.innerHTML = `
-          <td>
-            <div class="title-cell-wrapper">
-              <span class="trans-row-title">${escapeHTML(t.title)}</span>
-              <span class="trans-row-subtitle">${escapeHTML(t.type)}</span>
-            </div>
-          </td>
-          <td>
-            <span class="category-badge">${escapeHTML(t.category)}</span>
-          </td>
+          <td><div class="title-cell-wrapper"><span class="trans-row-title">${escapeHTML(t.title)}</span><span class="trans-row-subtitle">${escapeHTML(t.type)}</span></div></td>
+          <td><span class="category-badge">${escapeHTML(t.category)}</span></td>
           <td>${formatDate(t.date)}</td>
-          <td class="align-right amount-text ${amountClass}">${formattedAmount}</td>
+          <td class="align-right amount-text ${isInc ? 'amount-income' : 'amount-expense'}">${amt}</td>
           <td class="align-center" style="white-space: nowrap;">
-            <button class="edit-btn" data-id="${t.id}" aria-label="Edit transaction">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
-            <button class="delete-btn" data-id="${t.id}" aria-label="Delete transaction">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </td>
-        `;
-        fragment.appendChild(tr);
+            <button class="edit-btn" data-id="${t.id}" aria-label="Edit"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+            <button class="delete-btn" data-id="${t.id}" aria-label="Delete"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+          </td>`;
+        frag.appendChild(tr);
       });
-
-      listBody.innerHTML = '';
-      listBody.appendChild(fragment);
+      list.innerHTML = ''; list.appendChild(frag);
     }
 
     function renderThemeAndProfile() {
-      const theme = state.userProfile.theme || 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      
-      const greet = document.getElementById('userGreeting');
-      const avatar = document.getElementById('avatarName');
-      
+      const theme = state.userProfile.theme || 'dark'; document.documentElement.setAttribute('data-theme', theme);
+      const greet = qs('#userGreeting'), avatar = qs('#avatarName'), prefix = qs('#formCurrencyPrefix');
       if (greet) greet.textContent = `Hello, ${escapeHTML(state.userProfile.name)}`;
       if (avatar) avatar.textContent = state.userProfile.name ? state.userProfile.name.charAt(0) : 'G';
-      
-      const currencyPrefix = document.getElementById('formCurrencyPrefix');
-      if (currencyPrefix) currencyPrefix.textContent = getCurrencySymbol();
+      if (prefix) prefix.textContent = getCurrencySymbol();
     }
+    const refreshAll = () => { renderThemeAndProfile(); renderSummary(); renderTransactions(); drawChart(); };
 
-    function refreshAll() {
-      renderThemeAndProfile();
-      renderSummary();
-      renderTransactions();
-      drawChart();
-    }
-
-    // --- 7. Navigation Control (ShowPage) ---
+    // --- Page Routing ---
     function showPage(pageId) {
-      // Hide all pages
-      document.querySelectorAll('.page-content').forEach(page => {
-        page.style.display = 'none';
-      });
-
-      // Show targeted page
-      const targetPage = document.getElementById(pageId);
-      if (targetPage) targetPage.style.display = 'block';
-
-      // Update Nav Class active status
-      document.querySelectorAll('.nav-tab').forEach(tab => {
-        if (tab.dataset.target === pageId) {
-          tab.classList.add('active');
-        } else {
-          tab.classList.remove('active');
-        }
-      });
-
-      // Redraw charts if switching back to dashboard
-      if (pageId === 'dashboardPage') {
-        drawChart();
-      }
+      qsa('.page-content').forEach(p => p.style.display = 'none');
+      const target = qs('#' + pageId); if (target) target.style.display = 'block';
+      qsa('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.target === pageId));
+      if (pageId === 'dashboardPage') drawChart();
     }
 
-    // --- 8. Edit / Add Form Mode State Machine ---
+    // --- Edit Mode State Controller ---
     function setFormMode(mode, transaction = null) {
-      const heading = document.getElementById('formHeading');
-      const submitBtn = document.getElementById('formSubmitBtn');
-      const submitBtnText = submitBtn.querySelector('span');
-      let cancelBtn = document.getElementById('cancelEditBtn');
+      const heading = qs('#formHeading'), submitBtn = qs('#formSubmitBtn'), submitBtnText = submitBtn.querySelector('span');
+      let cancel = qs('#cancelEditBtn');
 
       if (mode === 'edit' && transaction) {
         activeEditId = transaction.id;
         if (heading) heading.textContent = 'Edit Transaction';
         if (submitBtnText) submitBtnText.textContent = 'Update Transaction';
 
-        // Prepopulate form fields
-        document.getElementById('transTitle').value = transaction.title;
-        document.getElementById('transAmount').value = transaction.amount;
-        document.getElementById('transType').value = transaction.type;
-        document.getElementById('transCategory').value = transaction.category;
-        document.getElementById('transDate').value = transaction.date;
+        qs('#transTitle').value = transaction.title;
+        qs('#transAmount').value = transaction.amount;
+        qs('#transType').value = transaction.type;
+        qs('#transCategory').value = transaction.category;
+        qs('#transDate').value = transaction.date;
 
-        // Inject dynamic Cancel button
-        if (!cancelBtn && submitBtn) {
-          cancelBtn = document.createElement('button');
-          cancelBtn.type = 'button';
-          cancelBtn.id = 'cancelEditBtn';
-          cancelBtn.className = 'control-btn';
-          cancelBtn.style.marginTop = 'var(--space-md)';
-          cancelBtn.style.width = '100%';
-          cancelBtn.style.justifyContent = 'center';
-          cancelBtn.textContent = 'Cancel Edit';
-          cancelBtn.addEventListener('click', () => {
-            setFormMode('add');
-          });
-          submitBtn.parentNode.appendChild(cancelBtn);
+        if (!cancel && submitBtn) {
+          cancel = document.createElement('button'); cancel.type = 'button'; cancel.id = 'cancelEditBtn'; cancel.className = 'control-btn';
+          cancel.style.marginTop = 'var(--space-md)'; cancel.style.width = '100%'; cancel.style.justifyContent = 'center';
+          cancel.textContent = 'Cancel Edit'; cancel.addEventListener('click', () => setFormMode('add'));
+          submitBtn.parentNode.appendChild(cancel);
         }
-
-        document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        qs('.form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
         activeEditId = null;
         if (heading) heading.textContent = 'Add Transaction';
         if (submitBtnText) submitBtnText.textContent = 'Add Transaction';
-
-        // Clear values
-        document.getElementById('transTitle').value = '';
-        document.getElementById('transAmount').value = '';
-        document.getElementById('transType').value = 'expense';
+        qs('#transTitle').value = ''; qs('#transAmount').value = ''; qs('#transType').value = 'expense';
         updateCategoryDropdown();
-        document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
-
-        if (cancelBtn) {
-          cancelBtn.remove();
-        }
+        qs('#transDate').value = new Date().toISOString().split('T')[0];
+        if (cancel) cancel.remove();
       }
     }
 
-    // --- 9. Cryptographic Authentication & Expiration (Web Crypto API) ---
-    async function hashPassword(password, saltHex) {
-      const encoder = new TextEncoder();
-      const passwordBytes = encoder.encode(password);
-      const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-      
-      const combined = new Uint8Array(saltBytes.length + passwordBytes.length);
-      combined.set(saltBytes);
-      combined.set(passwordBytes, saltBytes.length);
-      
-      const hashBuffer = await crypto.subtle.digest('SHA-256', combined);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    function generateRandomHex(bytesCount) {
-      const bytes = new Uint8Array(bytesCount);
-      crypto.getRandomValues(bytes);
-      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    async function startSecureSession() {
-      const token = generateRandomHex(16);
-      const expires = Date.now() + 2 * 60 * 60 * 1000; // 2 hours expiration
-      window.localStorage.setItem('ledgerlite_session_token', token);
-      window.localStorage.setItem('ledgerlite_session_expires', String(expires));
-    }
-
-    function isSessionValid() {
-      const token = window.localStorage.getItem('ledgerlite_session_token');
-      const expiresStr = window.localStorage.getItem('ledgerlite_session_expires');
-      if (!token || !expiresStr) return false;
-      
-      const expires = parseInt(expiresStr, 10);
-      if (isNaN(expires) || Date.now() >= expires) {
-        clearSession();
-        return false;
-      }
-      return true;
-    }
-
-    function clearSession() {
-      window.localStorage.removeItem('ledgerlite_session_token');
-      window.localStorage.removeItem('ledgerlite_session_expires');
-    }
-
+    // --- Auth UI manager ---
     function updateAuthUI() {
-      const hasAccount = window.localStorage.getItem('ledgerlite_hash') !== null;
-      const titleEl = document.querySelector('.auth-header h2');
-      const descEl = document.querySelector('.auth-header p');
-      const confirmGroup = document.getElementById('confirmPasswordGroup');
-      const submitText = document.getElementById('loginSubmitText');
-      const usernameInput = document.getElementById('loginName');
-      
-      // Reset errors
-      document.querySelectorAll('.auth-container .form-group').forEach(el => el.classList.remove('error'));
-      document.querySelectorAll('.auth-container .error-msg').forEach(el => el.style.display = 'none');
+      const hasAcc = window.localStorage.getItem('ledgerlite_hash') !== null;
+      const title = qs('.auth-header h2'), desc = qs('.auth-header p'), confirm = qs('#confirmPasswordGroup');
+      const submitText = qs('#loginSubmitText'), nameInput = qs('#loginName');
 
-      if (hasAccount) {
-        titleEl.textContent = 'Welcome Back';
-        descEl.textContent = 'Enter your master password to unlock your personal ledger.';
-        confirmGroup.style.display = 'none';
-        submitText.textContent = 'Unlock Ledger';
-        
+      qsa('.auth-container .form-group').forEach(el => el.classList.remove('error'));
+      qsa('.auth-container .error-msg').forEach(el => el.style.display = 'none');
+
+      if (hasAcc) {
+        title.textContent = 'Welcome Back'; desc.textContent = 'Enter your master password to unlock your personal ledger.';
+        confirm.style.display = 'none'; submitText.textContent = 'Unlock Ledger';
         try {
           const raw = window.localStorage.getItem(STORAGE_KEY);
           if (raw) {
             const parsed = JSON.parse(raw);
-            if (parsed.userProfile && parsed.userProfile.name) {
-              usernameInput.value = parsed.userProfile.name;
-              usernameInput.disabled = true;
-            }
+            if (parsed.userProfile && parsed.userProfile.name) { nameInput.value = parsed.userProfile.name; nameInput.disabled = true; }
           }
-        } catch (e) {
-          usernameInput.value = 'Guest';
-        }
+        } catch (e) { nameInput.value = 'Guest'; }
       } else {
-        titleEl.textContent = 'Create Master Account';
-        descEl.textContent = 'Set up a secure master password to protect your local ledger data.';
-        confirmGroup.style.display = 'block';
-        submitText.textContent = 'Create Account & Enter';
-        usernameInput.value = 'Guest';
-        usernameInput.disabled = false;
+        title.textContent = 'Create Master Account'; desc.textContent = 'Set up a secure master password to protect your local ledger data.';
+        confirm.style.display = 'block'; submitText.textContent = 'Create Account & Enter';
+        nameInput.value = 'Guest'; nameInput.disabled = false;
       }
     }
 
     function checkSessionAuth() {
-      const loginSection = document.getElementById('loginSection');
-      const appSection = document.getElementById('appSection');
-
+      const login = qs('#loginSection'), app = qs('#appSection');
       if (isSessionValid()) {
-        loginSection.style.display = 'none';
-        appSection.style.display = 'flex';
-        loadState();
-        refreshAll();
+        login.style.display = 'none'; app.style.display = 'flex'; loadState(); refreshAll();
       } else {
-        loginSection.style.display = 'flex';
-        appSection.style.display = 'none';
-        updateAuthUI();
-        if (activeChartInstance) {
-          activeChartInstance.destroy();
-          activeChartInstance = null;
-        }
+        login.style.display = 'flex'; app.style.display = 'none'; updateAuthUI();
+        if (activeChartInstance) { activeChartInstance.destroy(); activeChartInstance = null; }
       }
     }
 
-    // --- 10. Actions / Event Handlers ---
+    // --- Event Orchestration ---
     function setupEventListeners() {
-      // Login Form Submission (Async Web Crypto flows)
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      // Login Form submit
+      qs('#loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Reset Error Visuals
-        document.querySelectorAll('.auth-container .form-group').forEach(el => el.classList.remove('error'));
-        document.querySelectorAll('.auth-container .error-msg').forEach(el => el.style.display = 'none');
+        qsa('.auth-container .form-group').forEach(el => el.classList.remove('error'));
+        qsa('.auth-container .error-msg').forEach(el => el.style.display = 'none');
 
-        const usernameInput = document.getElementById('loginName');
-        const passwordInput = document.getElementById('loginPassword');
-        const confirmInput = document.getElementById('confirmPassword');
-        const hasAccount = window.localStorage.getItem('ledgerlite_hash') !== null;
-
+        const uInput = qs('#loginName'), pInput = qs('#loginPassword'), cInput = qs('#confirmPassword');
+        const hasAcc = window.localStorage.getItem('ledgerlite_hash') !== null;
         let valid = true;
 
-        if (!hasAccount && !usernameInput.value.trim()) {
-          usernameInput.closest('.form-group').classList.add('error');
-          document.getElementById('loginNameError').style.display = 'block';
-          valid = false;
-        }
-
-        if (!passwordInput.value) {
-          passwordInput.closest('.form-group').classList.add('error');
-          document.getElementById('passwordError').textContent = 'Password is required';
-          document.getElementById('passwordError').style.display = 'block';
-          valid = false;
-        }
-
-        if (!hasAccount) {
-          if (passwordInput.value !== confirmInput.value) {
-            confirmInput.closest('.form-group').classList.add('error');
-            document.getElementById('confirmPasswordError').style.display = 'block';
-            valid = false;
-          }
-        }
+        if (!hasAcc && !uInput.value.trim()) { uInput.closest('.form-group').classList.add('error'); qs('#loginNameError').style.display = 'block'; valid = false; }
+        if (!pInput.value) { pInput.closest('.form-group').classList.add('error'); qs('#passwordError').textContent = 'Password is required'; qs('#passwordError').style.display = 'block'; valid = false; }
+        if (!hasAcc && pInput.value !== cInput.value) { cInput.closest('.form-group').classList.add('error'); qs('#confirmPasswordError').style.display = 'block'; valid = false; }
 
         if (!valid) return;
 
         try {
-          if (!hasAccount) {
-            // First time setup - Create Master Account
-            const salt = generateRandomHex(16);
-            const hash = await hashPassword(passwordInput.value, salt);
-
-            window.localStorage.setItem('ledgerlite_salt', salt);
-            window.localStorage.setItem('ledgerlite_hash', hash);
-
-            // Save default profile data
-            loadState();
-            state.userProfile.name = usernameInput.value.trim();
-            saveState();
+          if (!hasAcc) {
+            const salt = generateRandomHex(16), hash = await hashPassword(pInput.value, salt);
+            window.localStorage.setItem('ledgerlite_salt', salt); window.localStorage.setItem('ledgerlite_hash', hash);
+            loadState(); state.userProfile.name = uInput.value.trim(); saveState();
           } else {
-            // Standard login verification
-            const salt = window.localStorage.getItem('ledgerlite_salt');
-            const expectedHash = window.localStorage.getItem('ledgerlite_hash');
-            const hash = await hashPassword(passwordInput.value, salt);
-
-            if (hash !== expectedHash) {
-              passwordInput.closest('.form-group').classList.add('error');
-              document.getElementById('passwordError').textContent = 'Incorrect password';
-              document.getElementById('passwordError').style.display = 'block';
-              return;
+            const salt = window.localStorage.getItem('ledgerlite_salt'), expected = window.localStorage.getItem('ledgerlite_hash');
+            const hash = await hashPassword(pInput.value, salt);
+            if (hash !== expected) {
+              pInput.closest('.form-group').classList.add('error'); qs('#passwordError').textContent = 'Incorrect password'; qs('#passwordError').style.display = 'block'; return;
             }
           }
-
-          // Establish secure session
-          await startSecureSession();
-          passwordInput.value = '';
-          if (confirmInput) confirmInput.value = '';
-          checkSessionAuth();
-        } catch (err) {
-          console.error(err);
-          alert('An unexpected security error occurred during authentication.');
-        }
+          await startSecureSession(); pInput.value = ''; cInput.value = ''; checkSessionAuth();
+        } catch (err) { alert('Authentication error occurred.'); }
       });
 
-      // Logout button click
-      document.getElementById('logoutBtn').addEventListener('click', () => {
-        clearSession();
-        setFormMode('add');
-        checkSessionAuth();
-      });
+      // Logout handler
+      qs('#logoutBtn').addEventListener('click', () => { clearSession(); setFormMode('add'); checkSessionAuth(); });
 
-      // Navigation tab tabs
-      document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', (e) => {
-          showPage(e.target.dataset.target);
-        });
-      });
+      // Routing tabs
+      qsa('.nav-tab').forEach(t => t.addEventListener('click', e => showPage(e.target.dataset.target)));
 
-      // Transaction submit handler
-      document.getElementById('transactionForm').addEventListener('submit', (e) => {
+      // Transaction form submit
+      qs('#transactionForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        // Reset Error Visuals
-        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
-        document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+        qsa('#transactionForm .form-group').forEach(el => el.classList.remove('error'));
+        qsa('#transactionForm .error-msg').forEach(el => el.style.display = 'none');
 
-        const title = document.getElementById('transTitle').value.trim();
-        const amount = parseFloat(document.getElementById('transAmount').value);
-        const type = document.getElementById('transType').value;
-        const category = document.getElementById('transCategory').value;
-        const date = document.getElementById('transDate').value;
-
+        const title = qs('#transTitle').value.trim(), amount = parseFloat(qs('#transAmount').value);
+        const type = qs('#transType').value, category = qs('#transCategory').value, date = qs('#transDate').value;
         let valid = true;
 
-        if (!title) {
-          document.getElementById('transTitle').closest('.form-group').classList.add('error');
-          document.getElementById('titleError').style.display = 'block';
-          valid = false;
-        }
-        if (isNaN(amount) || amount <= 0) {
-          document.getElementById('transAmount').closest('.form-group').classList.add('error');
-          document.getElementById('amountError').style.display = 'block';
-          valid = false;
-        }
-        if (!date) {
-          document.getElementById('transDate').closest('.form-group').classList.add('error');
-          document.getElementById('dateError').style.display = 'block';
-          valid = false;
-        }
+        if (!title) { qs('#transTitle').closest('.form-group').classList.add('error'); qs('#titleError').style.display = 'block'; valid = false; }
+        if (isNaN(amount) || amount <= 0) { qs('#transAmount').closest('.form-group').classList.add('error'); qs('#amountError').style.display = 'block'; valid = false; }
+        if (!date) { qs('#transDate').closest('.form-group').classList.add('error'); qs('#dateError').style.display = 'block'; valid = false; }
 
         if (!valid) return;
 
         if (activeEditId) {
-          // Update Mode
           const idx = state.transactions.findIndex(t => t.id === activeEditId);
-          if (idx !== -1) {
-            state.transactions[idx] = {
-              id: activeEditId,
-              title,
-              amount,
-              type,
-              category,
-              date
-            };
-          }
+          if (idx !== -1) state.transactions[idx] = { id: activeEditId, title, amount, type, category, date };
           setFormMode('add');
         } else {
-          // Add Mode
-          const newTx = {
-            id: 'tx_' + Date.now() + Math.random().toString(36).substring(2, 9),
-            title,
-            amount,
-            type,
-            category,
-            date
-          };
-          state.transactions.unshift(newTx);
+          state.transactions.unshift({ id: 'tx_' + Date.now() + Math.random().toString(36).substring(2, 9), title, amount, type, category, date });
         }
-
-        saveState();
-        refreshAll();
-
-        // Clear Add input fields
-        document.getElementById('transTitle').value = '';
-        document.getElementById('transAmount').value = '';
-        document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+        saveState(); refreshAll();
+        qs('#transTitle').value = ''; qs('#transAmount').value = ''; qs('#transDate').value = new Date().toISOString().split('T')[0];
       });
 
-      // Actions Column Event Delegation (Edit/Delete)
-      document.getElementById('transactionList').addEventListener('click', (e) => {
-        const editBtn = e.target.closest('.edit-btn');
-        if (editBtn) {
-          const id = editBtn.dataset.id;
-          const tx = state.transactions.find(t => t.id === id);
-          if (tx) {
-            setFormMode('edit', tx);
+      // Actions Column delegation (Edit / Delete)
+      qs('#transactionList').addEventListener('click', (e) => {
+        const edit = e.target.closest('.edit-btn'), del = e.target.closest('.delete-btn');
+        if (edit) {
+          const tx = state.transactions.find(t => t.id === edit.dataset.id);
+          if (tx) setFormMode('edit', tx); return;
+        }
+        if (del) {
+          const id = del.dataset.id, row = del.closest('tr');
+          if (row && id) {
+            if (activeEditId === id) setFormMode('add');
+            row.classList.add('fade-out-row');
+            row.addEventListener('animationend', () => {
+              state.transactions = state.transactions.filter(t => t.id !== id);
+              saveState(); refreshAll();
+            }, { once: true });
           }
-          return;
-        }
-
-        const deleteBtn = e.target.closest('.delete-btn');
-        if (!deleteBtn) return;
-
-        const id = deleteBtn.dataset.id;
-        const row = deleteBtn.closest('tr');
-        if (row && id) {
-          if (activeEditId === id) {
-            setFormMode('add');
-          }
-          row.classList.add('fade-out-row');
-          row.addEventListener('animationend', () => {
-            state.transactions = state.transactions.filter(t => t.id !== id);
-            saveState();
-            refreshAll();
-          }, { once: true });
         }
       });
 
-      // Search input changes
-      document.getElementById('searchBar').addEventListener('input', (e) => {
-        currentSearch = e.target.value;
-        renderTransactions();
+      // Realtime search & filter
+      qs('#searchBar').addEventListener('input', e => { currentSearch = e.target.value; renderTransactions(); });
+      qsa('.filter-tab').forEach(b => b.addEventListener('click', e => {
+        qsa('.filter-tab').forEach(x => x.classList.remove('active')); e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter; renderTransactions();
+      }));
+
+      // Theme toggle click
+      qs('#themeToggle').addEventListener('click', () => {
+        state.userProfile.theme = (state.userProfile.theme === 'dark') ? 'light' : 'dark';
+        saveState(); renderThemeAndProfile(); drawChart();
       });
 
-      // Filter tabs switching
-      document.querySelectorAll('.filter-tab').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          currentFilter = e.target.dataset.filter;
-          renderTransactions();
-        });
-      });
-
-      // Theme toggle button
-      document.getElementById('themeToggle').addEventListener('click', () => {
-        const currentTheme = state.userProfile.theme || 'dark';
-        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        state.userProfile.theme = nextTheme;
-        saveState();
-        renderThemeAndProfile();
-        // Redraw chart to update axis labels colours
-        drawChart();
-      });
-
-      // Settings profile form submission
-      document.getElementById('settingsForm').addEventListener('submit', (e) => {
+      // Settings submit
+      qs('#settingsForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const profileName = document.getElementById('profileName').value.trim();
-        const profileCurrency = document.getElementById('profileCurrency').value;
-
-        if (!profileName) {
-          alert('Username is required.');
-          return;
-        }
-
-        state.userProfile.name = profileName;
-        state.userProfile.currency = profileCurrency;
-        saveState();
-        refreshAll();
-        alert('Settings updated successfully!');
-        showPage('dashboardPage');
+        const name = qs('#profileName').value.trim(), curr = qs('#profileCurrency').value;
+        if (!name) { alert('Username is required.'); return; }
+        state.userProfile.name = name; state.userProfile.currency = curr;
+        saveState(); refreshAll(); alert('Settings updated!'); showPage('dashboardPage');
       });
 
-      // Export ledger JSON utility
-      document.getElementById('exportBtn').addEventListener('click', () => {
-        const dataStr = JSON.stringify(state, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `fintrack_ledger_${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      // Backup/Restore Database
+      qs('#exportBtn').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `ledgerlite_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
       });
-
-      // Import ledger JSON trigger
-      document.getElementById('importBtn').addEventListener('click', () => {
-        document.getElementById('importFileInput').click();
-      });
-
-      document.getElementById('importFileInput').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
+      qs('#importBtn').addEventListener('click', () => qs('#importFileInput').click());
+      qs('#importFileInput').addEventListener('change', e => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader(); reader.onload = ev => {
           try {
-            const parsed = JSON.parse(event.target.result);
-            if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON format');
-            
+            const parsed = JSON.parse(ev.target.result);
+            if (!parsed || typeof parsed !== 'object') throw new Error('Invalid structure');
             state.userProfile = parsed.userProfile || { ...DEFAULT_STATE.userProfile };
             state.transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
-            
-            saveState();
-            refreshAll();
-            alert('Ledger data restored successfully!');
-          } catch (err) {
-            alert('Restore failed: ' + err.message);
-          }
-          document.getElementById('importFileInput').value = '';
+            saveState(); refreshAll(); alert('Restore successful!');
+          } catch (err) { alert('Restore failed: ' + err.message); }
+          qs('#importFileInput').value = '';
         };
         reader.readAsText(file);
       });
-
-      // Reset transactions click handler
-      document.getElementById('resetAllBtn').addEventListener('click', () => {
-        const check = confirm('Are you sure you want to delete all transaction entries? Settings will be preserved.');
-        if (check) {
-          state.transactions = [];
-          setFormMode('add');
-          saveState();
-          refreshAll();
+      qs('#resetAllBtn').addEventListener('click', () => {
+        if (confirm('Delete all transaction entries? Settings will be preserved.')) {
+          state.transactions = []; setFormMode('add'); saveState(); refreshAll();
         }
       });
     }
 
-    // --- 11. Initial Run Setup ---
+    // --- Page Init ---
     document.addEventListener('DOMContentLoaded', () => {
-      // Populate inputs with current settings
       loadState();
-      
-      const profileNameInput = document.getElementById('profileName');
-      const profileCurrencySelect = document.getElementById('profileCurrency');
-      if (profileNameInput) profileNameInput.value = state.userProfile.name;
-      if (profileCurrencySelect) profileCurrencySelect.value = state.userProfile.currency;
-      
-      // Default Date
-      document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+      const pName = qs('#profileName'), pCurr = qs('#profileCurrency');
+      if (pName) pName.value = state.userProfile.name;
+      if (pCurr) pCurr.value = state.userProfile.currency;
 
-      // Setup drop-down categories
+      qs('#transDate').value = new Date().toISOString().split('T')[0];
       updateCategoryDropdown();
-
-      // Hook up UI element triggers
       setupEventListeners();
-
-      // Check session
       checkSessionAuth();
     });
   </script>
 </body>
+
 </html>

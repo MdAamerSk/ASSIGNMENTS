@@ -1,0 +1,9 @@
+{
+  "name": "fintrack-pro",
+  "version": "1.0.0",
+  "description": "Lightweight, local-storage-based personal finance tracker",
+  "type": "module",
+  "scripts": {
+    "dev": "npx http-server -p 3000"
+  }
+}

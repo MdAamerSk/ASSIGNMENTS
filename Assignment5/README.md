@@ -2,11 +2,14 @@
 
 A professional, high-end branding agency landing page built as a practice assignment to master modern HTML and CSS layout techniques. This project replicates a premium Webflow-style design, focusing on typography, whitespace, and smooth interactive elements.
 
+## Project Title
+**Øliv - Building Brands, One Success Story at a Time.**
+
 ## Preview
 <img width="1763" height="9613" alt="image" src="https://github.com/user-attachments/assets/fe6ddd83-75e9-4823-8ca3-f910c3b3b9e1" />
 
 ## Features
-- **Modern Navigation:** Clean navbar with a "We are hiring" badge and integrated cart count (only design).
+- **Modern Navigation:** Clean navbar with a "We are hiring" badge and integrated cart count.
 - **Infinite Logo Marquee:** A scrolling track of partner logos using CSS animations.
 - **Service Cards:** Minimalist information blocks for Brand Strategy, Visual Identity, and more.
 - **Work Showcase:** A creative grid featuring selected projects with hover-to-zoom effects.
@@ -19,6 +22,7 @@ A professional, high-end branding agency landing page built as a practice assign
 - **HTML5:** Semantic structure for better SEO and accessibility.
 - **CSS3:** Advanced styling, including grid systems and keyframe animations.
 - **Remix Icon:** Professional vector icons delivered via CDN.
+- **Google Fonts:** (Referred via standard typography practices in CSS).
 
 ## Concepts Practiced
 - **CSS Grid:** Used extensively for the Work Gallery, Team Section, and Values Grid to create complex asymmetrical layouts.
@@ -43,10 +47,10 @@ Assignment5/
 4. No build tools or compilers are required as this uses vanilla HTML and CSS.
 
 ## Learning Outcomes
-- Practiced building a complete landing page from a design reference.
-- Improved understanding of Flexbox and CSS Grid layouts.
-- Learned how to create infinite scrolling animations using CSS.
-- Gained experience with spacing, typography, and visual hierarchy.
+- Understanding how to translate a complex UI design (like Webflow templates) into raw code.
+- Mastering the `grid-template-areas` and `repeat()` functions in CSS Grid.
+- Learning to create seamless infinite animations without JavaScript.
+- Developing an eye for whitespace and typography hierarchy in professional web design.
 
 ## Future Improvements
 - Implement a fully mobile-responsive design using Media Queries.
@@ -55,10 +59,7 @@ Assignment5/
 - Implement smooth section scrolling (Smooth Scroll).
 
 ## Author
-
-MD Aamer Sk
-
-Frontend Development Learner
+Built by a Frontend Developer as an HTML & CSS practice assignment.
 
 ---
 *This project was created for educational purposes to demonstrate proficiency in core web technologies.*

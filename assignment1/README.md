@@ -11,6 +11,6 @@ A beginner-friendly HTML and CSS project that demonstrates the power of CSS posi
 Simply open `index.html` in any modern web browser to view the project.
 
 ## Technologies Used
-- HTML
-- CSS
+- HTML5
+- CSS3 (Vanilla)
 - Remix Icons
