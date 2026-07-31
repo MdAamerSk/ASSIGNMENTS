@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Search, ChevronDown, X } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 
-const Shop = () => {
+const Shop = ({ cart = [], toggleCartItem }) => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -201,7 +201,12 @@ const Shop = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
           {filteredProducts.map((val) => (
-            <ProductCard key={val.id} product={val} />
+            <ProductCard 
+              key={val.id} 
+              product={val} 
+              isAdded={cart.some((item) => item.id === val.id)}
+              onToggleCart={toggleCartItem}
+            />
           ))}
         </div>
       )}

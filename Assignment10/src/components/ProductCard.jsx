@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { ShoppingCart, Check } from 'lucide-react'
 
-const ProductCards = ({ product }) => {
-  const [added, setAdded] = useState(false)
+const ProductCards = ({ product, isAdded, onToggleCart }) => {
 
   // Retrieve rating details or fallback to mock data if not provided by API
   const rate = product.rating?.rate || 4.5
@@ -68,10 +67,10 @@ const ProductCards = ({ product }) => {
           </span>
 
           {/* Action Button */}
-          {added ? (
+          {isAdded ? (
             <button
               type="button"
-              onClick={() => setAdded(false)}
+              onClick={() => onToggleCart(product)}
               className="flex items-center gap-1.5 bg-[#0a2e1c]/80 border border-emerald-900/60 hover:bg-[#0d3f27] active:scale-95 text-[#34d399] px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200"
             >
               <Check className="w-3.5 h-3.5 stroke-[3px]" />
@@ -80,7 +79,7 @@ const ProductCards = ({ product }) => {
           ) : (
             <button
               type="button"
-              onClick={() => setAdded(true)}
+              onClick={() => onToggleCart(product)}
               className="flex items-center gap-1.5 bg-[#ccff00] hover:bg-[#b5e600] active:scale-95 text-black px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200"
             >
               <ShoppingCart className="w-3.5 h-3.5 stroke-[2.5px]" />
