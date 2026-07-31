@@ -49,6 +49,11 @@ const Shop = () => {
     setShowSortChip(false)
   }
 
+
+  const filteredProducts = products.filter(p => {
+    return (p.title.toLowerCase().includes(searchQuery.toLowerCase()) )
+   })
+
   return (
     <div className="max-w-[1600px] mx-auto px-8 py-8 animate-fade-in">
       
@@ -79,7 +84,7 @@ const Shop = () => {
         <div className="flex flex-wrap items-center gap-3">
           
           {/* Search Box */}
-          <div className="relative flex-grow max-w-full md:max-w-2xl lg:max-w-3xl">
+          <div className="relative grow max-w-full md:max-w-2xl lg:max-w-3xl">
             <Search className="absolute left-4 top-3.5 w-4.5 h-4.5 text-neutral-500" />
             <input 
               type="text" 
@@ -91,7 +96,7 @@ const Shop = () => {
           </div>
 
           {/* Category Dropdown */}
-          <div className="relative min-w-[140px]">
+          <div className="relative min-w-35">
             <select 
               value={category}
               onChange={(e) => {
@@ -109,7 +114,7 @@ const Shop = () => {
           </div>
 
           {/* Sort Dropdown (With green border) */}
-          <div className="relative min-w-[180px]">
+          <div className="relative min-w-45">
             <select 
               value={sortBy}
               onChange={(e) => {
@@ -183,7 +188,7 @@ const Shop = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-          {products.map((val) => (
+          {filteredProducts.map((val) => (
             <ProductCard key={val.id} product={val} />
           ))}
         </div>
@@ -193,4 +198,4 @@ const Shop = () => {
   )
 }
 
-export default Shop
+export default Shop
