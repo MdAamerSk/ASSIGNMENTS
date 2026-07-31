@@ -35,13 +35,29 @@ const Shop = () => {
     fetchProducts()
   }, [])
 
-  // Count products matching category (to mimic the screenshot)
-  const filteredCount = products.filter(p => {
-    if (showCategoryChip) {
-      return p.category.toLowerCase() === 'electronics'
-    }
-    return true
-  }).length
+  // Count products matching category dynamically based on filter state
+  const filteredProducts = products
+    .filter(p => {
+      const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) 
+      const matchesCategory = !showCategoryChip || p.category.toLowerCase() === category.toLowerCase()
+      return matchesSearch && matchesCategory
+    })
+    .sort((a, b) => {
+      if (!showSortChip) return 0 // No sort if sort chip is closed
+      
+      if (sortBy === 'Price: High → Low') {
+        return b.price - a.price
+      } else if (sortBy === 'Price: Low → High') {
+        return a.price - b.price
+      } else if (sortBy === 'Rating: High → Low') {
+        const ratingA = a.rating?.rate || 0
+        const ratingB = b.rating?.rate || 0
+        return ratingB - ratingA
+      }
+      return 0
+    })
+
+  const filteredCount = filteredProducts.length
 
   const handleClearAll = () => {
     setSearchQuery('')
@@ -49,10 +65,6 @@ const Shop = () => {
     setShowSortChip(false)
   }
 
-
-  const filteredProducts = products.filter(p => {
-    return (p.title.toLowerCase().includes(searchQuery.toLowerCase()) )
-   })
 
   return (
     <div className="max-w-[1600px] mx-auto px-8 py-8 animate-fade-in">
