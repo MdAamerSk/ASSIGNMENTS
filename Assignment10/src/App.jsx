@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import Navbar from './components/Navbar'
-import { Route,Routes } from 'react-router'
+import { Route, Routes, useLocation, Navigate } from 'react-router'
 import Home from './pages/Home'
 import About from './pages/About'
 import Shop from './pages/Shop'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
 import CartDrawer from './components/CartDrawer'
 
 const App = () => {
   const [cart, setCart] = useState([])
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [user, setUser] = useState({ name: 'demo', email: 'demo@skymart.com' })
+  const location = useLocation()
 
   const toggleCartItem = (product) => {
     setCart((prev) => {
@@ -42,15 +46,33 @@ const App = () => {
   }
 
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
+  
+  const showNavbar = location.pathname !== '/login' && location.pathname !== '/signup'
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-[#ccff00] selection:text-black">
-      <Navbar cartCount={totalQuantity} onCartClick={() => setIsCartOpen(true)} />
+      {/* Session protection: Redirect to signin if not logged in */}
+      {!user && location.pathname !== '/login' && location.pathname !== '/signup' && (
+        <Navigate to="/login" replace />
+      )}
+
+      {showNavbar && (
+        <Navbar 
+          cartCount={totalQuantity} 
+          onCartClick={() => setIsCartOpen(true)} 
+          user={user}
+          onLogout={() => setUser(null)}
+        />
+      )}
+      
       <Routes>
+        <Route path='/login' element={<Login onLogin={(u) => setUser(u)} />} />
+        <Route path='/signup' element={<Signup onSignup={(u) => setUser(u)} />} />
         <Route path='/' element={<Home cart={cart} />} />
         <Route path='/shop' element={<Shop cart={cart} toggleCartItem={toggleCartItem} />} />
         <Route path='/about' element={<About/>} />
       </Routes>
+
       <CartDrawer 
         cart={cart}
         isOpen={isCartOpen}
@@ -64,5 +86,3 @@ const App = () => {
 }
 
 export default App
-
-
