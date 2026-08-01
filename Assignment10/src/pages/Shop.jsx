@@ -10,8 +10,8 @@ const Shop = ({ cart = [], toggleCartItem }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [category, setCategory] = useState('Electronics')
   const [sortBy, setSortBy] = useState('Price: High → Low')
-  const [showCategoryChip, setShowCategoryChip] = useState(true)
-  const [showSortChip, setShowSortChip] = useState(true)
+  const [showCategoryChip, setShowCategoryChip] = useState(false)
+  const [showSortChip, setShowSortChip] = useState(false)
 
   // Fetch the data inside useEffect
   useEffect(() => {

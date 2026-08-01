@@ -47,7 +47,7 @@ const App = () => {
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-[#ccff00] selection:text-black">
       <Navbar cartCount={totalQuantity} onCartClick={() => setIsCartOpen(true)} />
       <Routes>
-        <Route path='/' element={<Home/>} />
+        <Route path='/' element={<Home cart={cart} />} />
         <Route path='/shop' element={<Shop cart={cart} toggleCartItem={toggleCartItem} />} />
         <Route path='/about' element={<About/>} />
       </Routes>
