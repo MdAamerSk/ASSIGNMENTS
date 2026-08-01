@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Box, TrendingUp, Star, Tag, ArrowRight } from 'lucide-react'
 
-const Home = ({ cart = [] }) => {
+const Home = ({ cart = [], user }) => {
   const navigate = useNavigate()
 
   // Calculate dynamic stats
@@ -37,12 +37,11 @@ const Home = ({ cart = [] }) => {
         <div className="space-y-4 max-w-2xl">
           <div className="flex items-center gap-2 text-[#ccff00] text-xs font-extrabold tracking-widest uppercase">
             <span>Good Evening</span>
-            <span role="img" aria-label="wave">👋</span>
           </div>
           
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
             Welcome back, <br className="sm:hidden" />
-            <span className="text-[#ccff00]">demo!</span>
+            <span className="text-[#ccff00]">{user?.name || 'demo'}!</span>
           </h1>
           
           <p className="text-neutral-400 text-sm md:text-base leading-relaxed max-w-lg">
