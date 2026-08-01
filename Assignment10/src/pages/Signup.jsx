@@ -8,24 +8,75 @@ const Signup = ({ onSignup }) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError('')
 
     // Simple validations
     if (!name || !email || !password || !confirmPassword) return
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!")
-      return
-    }
+    
     if (password.length < 6) {
-      alert("Password must be at least 6 characters!")
+      setError("Password must be at least 6 characters")
       return
     }
 
-    onSignup({ name, email })
-    navigate('/')
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+
+    // Process signup database insertion
+    try {
+      const users = JSON.parse(localStorage.getItem('skymart_users') || '[]')
+      
+      // Check if email already exists
+      const emailExists = users.some(
+        (u) => u.email.toLowerCase() === email.trim().toLowerCase()
+      )
+
+      if (emailExists) {
+        setError("Email already registered")
+        return
+      }
+
+      // Add new user to database
+      const newUser = {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password
+      }
+      users.push(newUser)
+      localStorage.setItem('skymart_users', JSON.stringify(users))
+
+      onSignup({ name: newUser.name, email: newUser.email })
+      navigate('/')
+    } catch (err) {
+      setError("An error occurred during registration")
+      console.error(err)
+    }
+  }
+
+  const handleNameChange = (val) => {
+    setName(val)
+    if (error) setError('')
+  }
+
+  const handleEmailChange = (val) => {
+    setEmail(val)
+    if (error) setError('')
+  }
+
+  const handlePasswordChange = (val) => {
+    setPassword(val)
+    if (error) setError('')
+  }
+
+  const handleConfirmChange = (val) => {
+    setConfirmPassword(val)
+    if (error) setError('')
   }
 
   return (
@@ -52,6 +103,13 @@ const Signup = ({ onSignup }) => {
           </p>
         </div>
 
+        {/* Inline Error Alert Box */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold p-3.5 rounded-xl text-center select-none animate-shake">
+            {error}
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
@@ -62,7 +120,7 @@ const Signup = ({ onSignup }) => {
               type="text"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => handleNameChange(e.target.value)}
               placeholder="Full name"
               className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-4 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
             />
@@ -75,7 +133,7 @@ const Signup = ({ onSignup }) => {
               type="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => handleEmailChange(e.target.value)}
               placeholder="Email address"
               className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-4 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
             />
@@ -88,7 +146,7 @@ const Signup = ({ onSignup }) => {
               type={showPassword ? 'text' : 'password'}
               required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handlePasswordChange(e.target.value)}
               placeholder="Password (min 6 chars)"
               className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-11 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
             />
@@ -108,7 +166,7 @@ const Signup = ({ onSignup }) => {
               type="password"
               required
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => handleConfirmChange(e.target.value)}
               placeholder="Confirm password"
               className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-4 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
             />

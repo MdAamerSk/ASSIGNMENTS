@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 
@@ -6,20 +6,59 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Seed a default demo account if no users are registered
+    try {
+      const savedUsers = localStorage.getItem('skymart_users')
+      if (!savedUsers) {
+        localStorage.setItem(
+          'skymart_users',
+          JSON.stringify([
+            { name: 'demo', email: 'demo@skymart.com', password: 'password' }
+          ])
+        )
+      }
+    } catch (e) {
+      console.error('Failed to seed default user database', e)
+    }
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError('')
     
-    // Perform simple validation
     if (!email || !password) return
 
-    // Simple email extraction for name
-    const username = email.split('@')[0] || 'demo'
-    
-    // Call parent handler
-    onLogin({ name: username, email })
-    navigate('/')
+    // Search users in localStorage
+    try {
+      const users = JSON.parse(localStorage.getItem('skymart_users') || '[]')
+      const matchedUser = users.find(
+        (u) => u.email.toLowerCase() === email.trim().toLowerCase() && u.password === password
+      )
+
+      if (matchedUser) {
+        onLogin({ name: matchedUser.name, email: matchedUser.email })
+        navigate('/')
+      } else {
+        setError('Invalid email or password')
+      }
+    } catch (err) {
+      setError('An error occurred during authentication')
+      console.error(err)
+    }
+  }
+
+  const handleEmailChange = (val) => {
+    setEmail(val)
+    if (error) setError('')
+  }
+
+  const handlePasswordChange = (val) => {
+    setPassword(val)
+    if (error) setError('')
   }
 
   return (
@@ -87,6 +126,13 @@ const Login = ({ onLogin }) => {
             </p>
           </div>
 
+          {/* Inline Error Alert Box */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-semibold p-3.5 rounded-xl text-center select-none animate-shake">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             
@@ -97,7 +143,7 @@ const Login = ({ onLogin }) => {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => handleEmailChange(e.target.value)}
                 placeholder="Email address"
                 className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-4 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
               />
@@ -110,7 +156,7 @@ const Login = ({ onLogin }) => {
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => handlePasswordChange(e.target.value)}
                 placeholder="Password"
                 className="w-full bg-[#131313] border border-neutral-900 rounded-xl py-3.5 pl-11 pr-11 text-xs font-semibold text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-800 transition-all"
               />

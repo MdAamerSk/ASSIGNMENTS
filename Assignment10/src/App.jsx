@@ -1,18 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation, Navigate } from 'react-router'
 import Home from './pages/Home'
-import About from './pages/About'
 import Shop from './pages/Shop'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import CartDrawer from './components/CartDrawer'
+import Footer from './components/Footer'
 
 const App = () => {
-  const [cart, setCart] = useState([])
+  // Initialize cart from localStorage
+  const [cart, setCart] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('skymart_cart')
+      return savedCart ? JSON.parse(savedCart) : []
+    } catch (e) {
+      console.error('Failed to load cart from localStorage', e)
+      return []
+    }
+  })
+
+  // Initialize user session from localStorage
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('skymart_current_user')
+      return savedUser ? JSON.parse(savedUser) : null
+    } catch (e) {
+      console.error('Failed to load user session from localStorage', e)
+      return null
+    }
+  })
+
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const [user, setUser] = useState({ name: 'demo', email: 'demo@skymart.com' })
   const location = useLocation()
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('skymart_cart', JSON.stringify(cart))
+  }, [cart])
+
+  // Save user session to localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('skymart_current_user', JSON.stringify(user))
+    } else {
+      localStorage.removeItem('skymart_current_user')
+    }
+  }, [user])
 
   const toggleCartItem = (product) => {
     setCart((prev) => {
@@ -45,12 +79,18 @@ const App = () => {
     setCart([])
   }
 
+  const handleLogout = () => {
+    setUser(null)
+    setCart([])
+    localStorage.removeItem('skymart_cart')
+  }
+
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
   
   const showNavbar = location.pathname !== '/login' && location.pathname !== '/signup'
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-[#ccff00] selection:text-black">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0a] text-white selection:bg-[#ccff00] selection:text-black">
       {/* Session protection: Redirect to signin if not logged in */}
       {!user && location.pathname !== '/login' && location.pathname !== '/signup' && (
         <Navigate to="/login" replace />
@@ -61,17 +101,20 @@ const App = () => {
           cartCount={totalQuantity} 
           onCartClick={() => setIsCartOpen(true)} 
           user={user}
-          onLogout={() => setUser(null)}
+          onLogout={handleLogout}
         />
       )}
       
-      <Routes>
-        <Route path='/login' element={<Login onLogin={(u) => setUser(u)} />} />
-        <Route path='/signup' element={<Signup onSignup={(u) => setUser(u)} />} />
-        <Route path='/' element={<Home cart={cart} />} />
-        <Route path='/shop' element={<Shop cart={cart} toggleCartItem={toggleCartItem} />} />
-        <Route path='/about' element={<About/>} />
-      </Routes>
+      <main className="flex-grow">
+        <Routes>
+          <Route path='/login' element={<Login onLogin={(u) => setUser(u)} />} />
+          <Route path='/signup' element={<Signup onSignup={(u) => setUser(u)} />} />
+          <Route path='/' element={<Home cart={cart} />} />
+          <Route path='/shop' element={<Shop cart={cart} toggleCartItem={toggleCartItem} />} />
+        </Routes>
+      </main>
+
+      {showNavbar && <Footer />}
 
       <CartDrawer 
         cart={cart}

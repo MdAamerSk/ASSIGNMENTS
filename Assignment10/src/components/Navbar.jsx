@@ -39,16 +39,6 @@ const Navbar = ({ cartCount = 0, onCartClick, user, onLogout }) => {
                 >
                     Shop
                 </NavLink>
-                <NavLink 
-                    to="/about" 
-                    className={({ isActive }) => 
-                        isActive 
-                            ? "text-[#ccff00] transition-colors" 
-                            : "text-neutral-400 hover:text-white transition-colors"
-                    }
-                >
-                    About
-                </NavLink>
             </div>
 
             {/* Action Controls */}
