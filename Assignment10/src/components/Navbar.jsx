@@ -2,7 +2,7 @@ import React from 'react'
 import { ShoppingCart, LogOut, Zap } from 'lucide-react'
 import { NavLink } from 'react-router'
 
-const Navbar = ({ cartCount = 0 }) => {
+const Navbar = ({ cartCount = 0, onCartClick }) => {
 
     return (
         <nav className="w-full bg-[#0a0a0a] text-white px-8 py-4 flex items-center justify-between border-b border-neutral-800 sticky top-0 z-50">
@@ -63,7 +63,10 @@ const Navbar = ({ cartCount = 0 }) => {
                 </div>
 
                 {/* Cart Icon Button with Badge */}
-                <button className="relative p-2.5 border border-neutral-700 rounded-xl hover:bg-neutral-800 transition-colors text-white">
+                <button 
+                    onClick={onCartClick}
+                    className="relative p-2.5 border border-neutral-700 rounded-xl hover:bg-neutral-800 transition-colors text-white cursor-pointer"
+                >
                     <ShoppingCart className="w-4 h-4" />
                     <span className="absolute -top-1.5 -right-1.5 bg-[#ccff00] text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                         {cartCount}
