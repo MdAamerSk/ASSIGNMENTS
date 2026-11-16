@@ -7,7 +7,7 @@ Built with **React**, **Vite**, **Tailwind CSS (v4)**, and **React Router**.
 ---
 
 ## 🚀 Live Demo & Deployment
-- **Platform**: Hosted on **Vercel**
+- **Platform**: Hosted on **Vercel**  https://skymart-shopping.vercel.app
 - **Refresh Support**: Enabled via custom `vercel.json` rewrite routing to prevent SPA client-side 404 errors.
 
 ---
