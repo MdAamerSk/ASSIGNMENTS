@@ -42,3 +42,27 @@ export const registerValidator = [
         next();
     }
 ];
+
+export const loginValidator = [
+
+    body("email")
+        .trim()
+        .notEmpty().withMessage("Email is required").bail()
+        .isEmail().withMessage("Valid email id is required")
+        .normalizeEmail(),
+    body("password")
+        .trim()
+        .notEmpty().withMessage("Password is required").bail(),
+
+    (req,res,next) =>{
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Validation failed",
+                errors: errors.array()
+            })
+        }
+        next()
+    }
+]
